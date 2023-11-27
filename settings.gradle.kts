@@ -1,2 +1,2 @@
-rootProject.name = "Bootcamp-project-bookshop"
+rootProject.name = "bookshop-service"
 

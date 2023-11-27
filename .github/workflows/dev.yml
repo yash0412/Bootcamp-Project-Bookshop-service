@@ -54,6 +54,14 @@ jobs:
       - run: echo "Starting Integration Tests"
       - run: echo "Integration Tests In Progress..."
       - run: echo "Integration Tests Completed"
+  
+  Build-Image:
+    runs-on: ubuntu-latest
+    needs: Integration-Test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create docker image
+          run: docker build -t bookshop-service:${{GITHUB_SHA}} .
 
   Dev-Deployment:
     runs-on: ubuntu-latest

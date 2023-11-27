@@ -5,7 +5,7 @@ plugins {
     id("org.flywaydb.flyway") version "9.22.3"
 }
 
-group = "org.example"
+group = "org.bookshop"
 version = "1.0-SNAPSHOT"
 
 repositories {
