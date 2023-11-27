@@ -1,2 +1,4 @@
-package org.bookshop;public class BookController {
+package org.bookshop;
+
+public class BookController {
 }
