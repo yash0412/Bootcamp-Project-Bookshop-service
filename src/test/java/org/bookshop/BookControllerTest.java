@@ -26,11 +26,26 @@ public class BookControllerTest {
 
     @Test
     void getAllBooks() throws Exception {
-        Mockito.when(bookService.getAllBooks())
-                .thenReturn(List.of(new Book("Alchemist")));
         mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.books").isArray());
+    }
+
+    @Test
+    void shouldReturnBook() throws Exception {
+        Mockito.when(bookService.getAllBooks())
+                .thenReturn(List.of(new Book("abcd",
+                        "Think And Grow Rich",
+                        "Nepolean Hill",
+                        120.00, 50)));
+
+        mockMvc.perform(get("/books"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.books[0].title").value("Think And Grow Rich"))
+                .andExpect(jsonPath("$.books[0].id").value("abcd"))
+                .andExpect(jsonPath("$.books[0].author").value("Nepolean Hill"))
+                .andExpect(jsonPath("$.books[0].stockCount").value(50));
+
     }
 
 
