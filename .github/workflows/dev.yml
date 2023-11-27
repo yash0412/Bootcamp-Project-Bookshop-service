@@ -51,7 +51,8 @@ jobs:
     - name: Publish Docker Image to GHCR
       uses: macbre/push-to-ghcr@master
       with:
-        image_name: bookshop-service:${{github.sha}}
+        image_name: bookshop-service
+        image_tag: ${{github.sha}}
         github_token: ${{ secrets.ACTION_TOKEN }}
     
 
