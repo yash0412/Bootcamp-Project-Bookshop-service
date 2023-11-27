@@ -30,8 +30,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.ACTION_TOKEN }}
+      - name: Convert repo name to lower case
+        env:
+          REPO_NAME: '${{ github.repository }}'
+        run: echo "REPO_NAME_LC=${REPO_NAME,,}" >>${GITHUB_ENV}
       - name: Pull Image from GHCR
-        run: docker pull ghcr.io/${{ github.repository }}.toLowerCase()/${{ inputs.refToBuild }}.toLowerCase()
+        run: docker pull ghcr.io/${{ REPO_NAME_LC }}/${{ inputs.refToBuild }}
 
   Production-Deployment:
     runs-on: ubuntu-latest
