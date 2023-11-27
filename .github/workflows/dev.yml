@@ -31,7 +31,7 @@ jobs:
       with:
         arguments: test
 
-  Build-Jar:
+  Build-Jar-And-Docker-Image:
     runs-on: ubuntu-latest
     needs: Run-Unit-Test
     steps:
@@ -45,23 +45,20 @@ jobs:
       uses: gradle/gradle-build-action@v2 # v2.6.0
       with:
         arguments: build
+    - uses: actions/checkout@v3
+    - name: Create docker image
+       run: docker build -t bookshop-service:${{github.sha}} .
+    
 
   Integration-Test:
     runs-on: ubuntu-latest
-    needs: Build-Jar
+    needs: Build-Jar-And-Docker-Image
     steps:
       - uses: actions/checkout@v3
       - run: echo "Starting Integration Tests"
       - run: echo "Integration Tests In Progress..."
       - run: echo "Integration Tests Completed"
   
-  Build-Image:
-    runs-on: ubuntu-latest
-    needs: Integration-Test
-    steps:
-      - uses: actions/checkout@v3
-      - name: Create docker image
-        run: docker build -t bookshop-service:${{github.sha}} .
 
   Dev-Deployment:
     runs-on: ubuntu-latest
