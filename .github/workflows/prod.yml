@@ -35,7 +35,7 @@ jobs:
           REPO_NAME: '${{ github.repository }}'
         run: echo "REPO_NAME_LC=${REPO_NAME,,}" >>${GITHUB_ENV}
       - name: Pull Image from GHCR
-        run: docker pull ghcr.io/${{ REPO_NAME_LC }}/${{ inputs.refToBuild }}
+        run: docker pull ghcr.io/${ REPO_NAME_LC }/${{ inputs.refToBuild }}
 
   Production-Deployment:
     runs-on: ubuntu-latest
