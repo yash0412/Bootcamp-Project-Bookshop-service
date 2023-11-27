@@ -46,15 +46,14 @@ jobs:
       uses: gradle/gradle-build-action@v2 # v2.6.0
       with:
         arguments: build
-    - name: Create docker image
-      run: docker build -t bookshop-service:${{github.sha}} .
     - name: Publish Docker Image to GHCR
       uses: macbre/push-to-ghcr@master
       with:
-        image_name: bookshop-service
-        image_tag: ${{github.sha}}
+        image_name: ${{ github.repository }}
+        image_tag: ${{ github.sha }}
         github_token: ${{ secrets.ACTION_TOKEN }}
-    
+        dockerfile: ./Dockerfile
+        context: .
 
   Integration-Test:
     runs-on: ubuntu-latest
