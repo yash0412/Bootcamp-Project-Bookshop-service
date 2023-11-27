@@ -19,6 +19,20 @@ permissions:
   contents: read
 
 jobs:
+  Pull-Image:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    steps:
+      - name: Log in to GHCR
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.ACTION_TOKEN }}
+      - name: Pull Image from GHCR
+        run: docker pull ghcr.io/${{ github.repository }}/${{ inputs.refToBuild }}
+
   Production-Deployment:
     runs-on: ubuntu-latest
     steps:
