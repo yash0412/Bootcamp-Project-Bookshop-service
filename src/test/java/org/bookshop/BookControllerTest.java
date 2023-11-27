@@ -44,8 +44,17 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.books[0].title").value("Think And Grow Rich"))
                 .andExpect(jsonPath("$.books[0].id").value("abcd"))
                 .andExpect(jsonPath("$.books[0].author").value("Nepolean Hill"))
-                .andExpect(jsonPath("$.books[0].stockCount").value(50));
+                .andExpect(jsonPath("$.books[0].quantity").value(50));
 
+    }
+
+    @Test
+    void shouldReturnEmptyBook() throws Exception {
+        Mockito.when(bookService.getAllBooks()).thenReturn(List.of());
+
+        mockMvc.perform(get("/books"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.books").isEmpty());
     }
 
 
