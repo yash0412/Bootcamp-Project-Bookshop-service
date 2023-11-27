@@ -31,7 +31,8 @@ jobs:
       with:
         arguments: test
 
-  Build-Jar-And-Docker-Image:
+  Build-And-Publish:
+    name: Build Jar And Docker Image And Publish Image to GHCR
     runs-on: ubuntu-latest
     needs: Run-Unit-Test
     steps:
@@ -47,11 +48,16 @@ jobs:
         arguments: build
     - name: Create docker image
       run: docker build -t bookshop-service:${{github.sha}} .
+    - name: Publish Docker Image to GHCR
+      uses: macbre/push-to-ghcr@master
+      with:
+        image_name: bookshop-service:${{github.sha}}
+        github_token: ${{ secrets.ACTION_TOKEN }}
     
 
   Integration-Test:
     runs-on: ubuntu-latest
-    needs: Build-Jar-And-Docker-Image
+    needs: Build-And-Publish
     steps:
       - uses: actions/checkout@v3
       - run: echo "Starting Integration Tests"
