@@ -61,7 +61,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Create docker image
-        run: docker build -t bookshop-service:${{GITHUB_SHA}} .
+        run: docker build -t bookshop-service:${{github.sha}} .
 
   Dev-Deployment:
     runs-on: ubuntu-latest
