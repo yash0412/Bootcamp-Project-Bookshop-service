@@ -35,6 +35,7 @@ jobs:
 
   Production-Deployment:
     runs-on: ubuntu-latest
+    needs: Pull-Image
     steps:
       - uses: actions/checkout@v3
         with:
