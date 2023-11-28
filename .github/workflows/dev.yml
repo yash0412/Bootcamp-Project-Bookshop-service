@@ -77,6 +77,14 @@ jobs:
     needs: Build-And-Publish
     steps:
       - uses: actions/checkout@v3
+      - name: Log in to GHCR
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.ACTION_TOKEN }}
+      - name: Pull Image from GHCR
+        run: docker pull ghcr.io/yash0412/bootcamp-project-bookshop-service:${{ github.sha }}
       - run: echo "Starting Deployment to Dev"
       - run: echo "Deployment to Dev In Progress..."
       - run: echo "Deployed to Dev"
