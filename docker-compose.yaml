@@ -6,3 +6,10 @@ services:
     container_name: bookshop-service
     ports:
       - "8080:8080"
+
+  book-ui:
+    image:
+      ghcr.io/yash0412/bootcamp-project-bookshop-ui:latest
+    container_name: bookshop-ui
+    ports:
+      - "80:80"
