@@ -42,4 +42,14 @@ public class CartControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.carts[0].id").value("1"));
     }
+
+    @Test
+    void shouldReturnEmptyBook() throws Exception {
+        String uuid = "123";
+        Mockito.when(cartService.getCartItems(uuid)).thenReturn(List.of());
+
+        mockMvc.perform(get("/cart-items"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carts").isEmpty());
+    }
 }
