@@ -54,6 +54,14 @@ jobs:
         github_token: ${{ secrets.ACTION_TOKEN }}
         dockerfile: ./Dockerfile
         context: .
+    - name: Publish Docker Image to GHCR with Latest Tag
+      uses: macbre/push-to-ghcr@master
+      with:
+        image_name: yash0412/bootcamp-project-bookshop-service
+        image_tag: latest
+        github_token: ${{ secrets.ACTION_TOKEN }}
+        dockerfile: ./Dockerfile
+        context: .
 
   Integration-Test:
     runs-on: ubuntu-latest
