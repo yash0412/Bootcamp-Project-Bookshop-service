@@ -2,6 +2,7 @@ package org.bookshop;
 
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,6 +21,9 @@ public class CartEntity {
     String userId;
     Integer qty;
 
+    Timestamp createdDate;
+    Timestamp updatedDate;
+
     public CartEntity(
             String id,
             String bookId,
@@ -30,6 +34,7 @@ public class CartEntity {
         this.bookId = bookId;
         this.userId = userId;
         this.qty = qty;
+        this.createdDate = new Timestamp(System.currentTimeMillis());
     }
 
     public CartEntity() {
