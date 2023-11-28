@@ -34,7 +34,7 @@ tasks.jacocoTestCoverageVerification {
     violationRules {
         rule {
             limit {
-                counter = "LINE"
+                counter = "INSTRUCTION"
                 value = "COVEREDRATIO"
                 minimum = "0.90".toBigDecimal()
             }
