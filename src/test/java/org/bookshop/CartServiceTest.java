@@ -34,7 +34,17 @@ public class CartServiceTest {
         Assertions.assertThat(allCartItems).containsAll(expectedBooks);
     }
 
-
-
-
+    @Test
+    void shouldCreateCartItem(){
+        CartRepository repository =  Mockito.mock(CartRepository.class);
+        CartService cartService = new CartService(repository);
+        CartEntity cartEntity = new CartEntity("123", "1", "1", 1);
+        cartService.createCartItem(
+                "123",
+                "1",
+                "1",
+                1
+        );
+        Mockito.verify(repository, Mockito.times(1)).saveAndFlush(cartEntity);
+    }
 }

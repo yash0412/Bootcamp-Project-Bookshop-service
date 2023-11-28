@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,5 +52,16 @@ public class CartControllerTest {
         mockMvc.perform(get("/cart-items"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.carts").isEmpty());
+    }
+
+    @Test
+    void shouldCreateCartItems() throws Exception{
+        mockMvc.perform(post("/cart-items")
+                        .param("id","123")
+                        .param("bookId", "1")
+                        .param("userId", "1")
+                        .param("qty", "1")
+                )
+                .andExpect(status().isCreated());
     }
 }

@@ -2,7 +2,6 @@ package org.bookshop;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class CartService {
@@ -19,5 +18,16 @@ public class CartService {
                 .filter(cartEntity -> cartEntity.userId.equals(uuid)).
                 map(cartEntity -> new Cart(cartEntity.id, cartEntity.userId, cartEntity.bookId, cartEntity.qty))
                 .toList();
+    }
+
+    public CartEntity createCartItem(String id, String bookId, String userId, Integer qty) {
+        return cartRepository.saveAndFlush(
+                new CartEntity(
+                        id,
+                        bookId,
+                        userId,
+                        qty
+                )
+        );
     }
 }
