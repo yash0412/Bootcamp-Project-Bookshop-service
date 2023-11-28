@@ -33,7 +33,7 @@ jobs:
 
   Integration-Test:
     runs-on: ubuntu-latest
-    needs: Build-And-Publish
+    needs: Run-Unit-Test
     steps:
       - uses: actions/checkout@v3
       - run: echo "Starting Integration Tests"
@@ -43,7 +43,7 @@ jobs:
   Build-And-Publish:
     name: Build Jar And Docker Image And Publish Image to GHCR
     runs-on: ubuntu-latest
-    needs: Run-Unit-Test
+    needs: Integration-Test
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -74,7 +74,7 @@ jobs:
 
   Dev-Deployment:
     runs-on: ubuntu-latest
-    needs: Integration-Test
+    needs: Build-And-Publish
     steps:
       - uses: actions/checkout@v3
       - run: echo "Starting Deployment to Dev"
