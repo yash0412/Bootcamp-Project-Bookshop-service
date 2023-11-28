@@ -1,18 +1,12 @@
 version: '2'
 services:
-  book-service:
-    image:
-      ghcr.io/yash0412/bootcamp-project-bookshop-service:latest
-    container_name: bookshop-service
-    ports:
-      - "8080:8080"
-
   book-ui:
     image:
       ghcr.io/yash0412/bootcamp-project-bookshop-ui:latest
     container_name: bookshop-ui
     ports:
       - "80:80"
+
   postgres:
     image: postgres
     restart: always
@@ -25,5 +19,12 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  book-service:
+    depends_on: [postgres]
+    image:
+      ghcr.io/yash0412/bootcamp-project-bookshop-service:latest
+    container_name: bookshop-service
+    ports:
+      - "8080:8080"
 volumes:
   pgdata:
