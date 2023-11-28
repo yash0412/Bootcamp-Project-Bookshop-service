@@ -16,7 +16,7 @@ public class BookEntity {
     double price;
     @Id
     @Column(name = "id")
-    String Id;
+    String id;
 
     String title;
 
@@ -28,7 +28,7 @@ public class BookEntity {
                       double price,
                       int quantity,
                       String imageUrl)  {
-        this.Id = id;
+        this.id = id;
         this.title = title;
         this.author = author;
         this.price = price;

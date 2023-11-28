@@ -1,10 +1,9 @@
 package org.bookshop;
 
 
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +20,12 @@ public class BookController {
     @GetMapping("books")
     public ResponseEntity<Books> allBooks(){
         List<Book> allBooks = bookService.getAllBooks();
+        return ResponseEntity.ok(new Books(allBooks));
+    }
+
+    @PostMapping("booksByIds")
+    public ResponseEntity<Books> getBookList(@RequestBody ListBookRequest request) {
+        List<Book> allBooks =bookService.getBooks(request.bookIdList());
         return ResponseEntity.ok(new Books(allBooks));
     }
 }
