@@ -13,7 +13,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pass123
-      POSTGRES_DB: bookdb
+      POSTGRES_DB: bookshop
     ports:
       - "5432:5432"
     volumes:
