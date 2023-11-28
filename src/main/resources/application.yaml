@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://0.0.0.0:5432/bookshop
+    username: postgres
+    password: pass123
+    driverClassName: org.postgresql.Driver
+
+  flyway:
+    enabled: true

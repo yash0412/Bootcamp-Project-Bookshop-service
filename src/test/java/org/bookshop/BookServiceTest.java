@@ -21,14 +21,14 @@ public class BookServiceTest {
                 .thenReturn(List.of(new BookEntity("someid",
                         "Think And Grow Rich",
                         "Nepolean Hill",
-                        120.00, 50)));
+                        120.00, 50, "imageUrl")));
 
         BookService bookService = new BookService(bookRepository);
 
         List<Book> expectedBooks = List.of(new Book("someid",
                 "Think And Grow Rich",
                 "Nepolean Hill",
-                120.00, 50));
+                120.00, 50, "imageUrl"));
         List<Book> allBooks = bookService.getAllBooks();
 
         Assertions.assertThat(allBooks).containsAll(expectedBooks);

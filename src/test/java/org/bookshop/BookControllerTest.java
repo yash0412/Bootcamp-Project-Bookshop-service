@@ -37,14 +37,16 @@ public class BookControllerTest {
                 .thenReturn(List.of(new Book("abcd",
                         "Think And Grow Rich",
                         "Nepolean Hill",
-                        120.00, 50)));
+                        120.00, 50, "imageUrl")));
 
         mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.books[0].title").value("Think And Grow Rich"))
                 .andExpect(jsonPath("$.books[0].id").value("abcd"))
                 .andExpect(jsonPath("$.books[0].author").value("Nepolean Hill"))
-                .andExpect(jsonPath("$.books[0].quantity").value(50));
+                .andExpect(jsonPath("$.books[0].quantity").value(50))
+                .andExpect(jsonPath("$.books[0].imageUrl").value("imageUrl"));
+
 
     }
 

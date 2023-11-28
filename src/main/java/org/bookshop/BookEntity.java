@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 public class BookEntity {
 
 
+    String imageurl;
     int quantity;
     double price;
     @Id
@@ -25,12 +26,14 @@ public class BookEntity {
                       String title,
                       String author,
                       double price,
-                      int quantity)  {
+                      int quantity,
+                      String imageUrl)  {
         this.Id = id;
         this.title = title;
         this.author = author;
         this.price = price;
         this.quantity = quantity;
+        this.imageurl = imageUrl;
     }
 
 
