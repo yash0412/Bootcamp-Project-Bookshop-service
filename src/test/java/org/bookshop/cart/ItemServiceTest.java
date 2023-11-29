@@ -1,10 +1,6 @@
 package org.bookshop.cart;
 
 import org.assertj.core.api.Assertions;
-import org.bookshop.cart.Cart;
-import org.bookshop.cart.CartEntity;
-import org.bookshop.cart.CartRepository;
-import org.bookshop.cart.CartService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -14,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
-public class CartServiceTest {
+public class ItemServiceTest {
 
     @Mock
     CartRepository cartRepository;
@@ -29,13 +25,13 @@ public class CartServiceTest {
 
         CartService cartService = new CartService(cartRepository);
 
-        List<Cart> expectedBooks = List.of(new Cart("1",
+        List<Item> expectedBooks = List.of(new Item("1",
                 "123",
                 "123",
                 1));
-        List<Cart> allCartItems = cartService.getCartItems("123");
+        List<Item> allItemItems = cartService.getCartItems("123");
 
-        Assertions.assertThat(allCartItems).containsAll(expectedBooks);
+        Assertions.assertThat(allItemItems).containsAll(expectedBooks);
     }
 
     @Test

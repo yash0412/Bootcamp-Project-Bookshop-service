@@ -2,7 +2,6 @@ package org.bookshop.cart;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.bookshop.cart.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(CartController.class)
 @AutoConfigureMockMvc
-public class CartControllerTest {
+public class ItemControllerTest {
     @Autowired
     MockMvc mockMvc;
 
@@ -39,16 +38,16 @@ public class CartControllerTest {
     void getEmptyCartItems() throws Exception {
         mockMvc.perform(get("/cart-items"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.carts").isArray());
+                .andExpect(jsonPath("$.items").isArray());
     }
 
     @Test
     void shouldReturnCartItems() throws Exception{
         String userId = "1";
-        Mockito.when(cartService.getCartItems(userId)).thenReturn((List.of(new Cart("1", userId, "book-1", 1))));
+        Mockito.when(cartService.getCartItems(userId)).thenReturn((List.of(new Item("1", userId, "book-1", 1))));
         mockMvc.perform(get("/cart-items"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.carts[0].id").value("1"));
+                .andExpect(jsonPath("$.items[0].id").value("1"));
     }
 
     @Test
@@ -58,7 +57,7 @@ public class CartControllerTest {
 
         mockMvc.perform(get("/cart-items"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.carts").isEmpty());
+                .andExpect(jsonPath("$.items").isEmpty());
     }
 
     @Test

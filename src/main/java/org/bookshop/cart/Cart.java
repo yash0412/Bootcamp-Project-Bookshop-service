@@ -1,5 +1,6 @@
 package org.bookshop.cart;
 
+import java.util.List;
 
-public record Cart(String id, String userId, String bookId, Integer qty) {
+public record Cart(List<Item> items)  {
 }

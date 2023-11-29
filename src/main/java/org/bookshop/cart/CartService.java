@@ -12,11 +12,11 @@ public class CartService {
         this.cartRepository = cartRepository;
     }
 
-    public List<Cart> getCartItems(String userId) {
+    public List<Item> getCartItems(String userId) {
         return cartRepository.findAll()
                 .stream()
                 .filter(cartEntity -> cartEntity.userId.equals(userId)).
-                map(cartEntity -> new Cart(cartEntity.id, cartEntity.userId, cartEntity.bookId, cartEntity.qty))
+                map(cartEntity -> new Item(cartEntity.id, cartEntity.userId, cartEntity.bookId, cartEntity.qty))
                 .toList();
     }
 
