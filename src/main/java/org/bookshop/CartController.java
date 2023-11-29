@@ -45,4 +45,19 @@ public class CartController {
         return ResponseEntity.created(location).header("MyResponseHeader", "MyValue").body("Added to cart successfully");
 
     }
+
+    @PutMapping("cart-items")
+    public ResponseEntity <String> updateCartItems(
+            @RequestBody  CartItem req
+    ){
+        cartService.updateCartItem(
+                req.bookId(),
+                req.userId(),
+                req.qty()
+        );
+
+        URI location = URI.create("localhost:8080");
+        return ResponseEntity.created(location).header("MyResponseHeader", "MyValue").body("Updated cart successfully");
+
+    }
 }

@@ -30,4 +30,15 @@ public class CartService {
                 )
         );
     }
+
+    public void updateCartItem(String bookId, String userId, Integer qty) {
+        List<CartEntity> cartEntity = cartRepository.findCartEntitiesByBookIdAndUserId(bookId, userId);
+
+        for (CartEntity items:cartEntity) {
+            items.qty = qty;
+            cartRepository.saveAndFlush(
+                    items
+            );
+        }
+    }
 }

@@ -47,4 +47,22 @@ public class CartServiceTest {
         );
         Mockito.verify(repository, Mockito.times(1)).saveAndFlush(cartEntity);
     }
+
+    @Test
+    void shouldUpdateCartItem(){
+        CartRepository repository =  Mockito.mock(CartRepository.class);
+        CartService cartService = new CartService(repository);
+        CartEntity cartEntity = new CartEntity("1",
+                "123",
+                "1",
+                100);
+        Mockito.when(repository.findCartEntitiesByBookIdAndUserId("123", "1")).
+                thenReturn(List.of(cartEntity));
+        cartService.updateCartItem(
+                "123",
+                "1",
+                100
+        );
+        Mockito.verify(repository, Mockito.times(1)).saveAndFlush(cartEntity);
+    }
 }
