@@ -3,7 +3,7 @@ CREATE TABLE CARTS
 (
     id VARCHAR(50) PRIMARY KEY,
     userId  VARCHAR(200) NOT NULL,
-    bookId VARCHAR(50) REFERENCES BOOKS(id),
+    bookId VARCHAR(50) NOT NULL,
     qty NUMERIC(10, 2) NOT NULL,
     created_date TIMESTAMP NOT NULL,
     updated_date TIMESTAMP

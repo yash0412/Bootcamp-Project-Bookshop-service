@@ -1,12 +1,14 @@
 package org.bookshop;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -24,12 +26,14 @@ public class CartControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @MockBean
     private CartService cartService;
 
     @Test
     void getEmptyCartItems() throws Exception {
-        String uuid = "123";
         mockMvc.perform(get("/cart-items"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.carts").isArray());
@@ -37,8 +41,8 @@ public class CartControllerTest {
 
     @Test
     void shouldReturnCartItems() throws Exception{
-        String uuid = "123";
-        Mockito.when(cartService.getCartItems(uuid)).thenReturn((List.of(new Cart("1", uuid, "book-1", 1))));
+        String userId = "1";
+        Mockito.when(cartService.getCartItems(userId)).thenReturn((List.of(new Cart("1", userId, "book-1", 1))));
         mockMvc.perform(get("/cart-items"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.carts[0].id").value("1"));
@@ -46,8 +50,8 @@ public class CartControllerTest {
 
     @Test
     void shouldReturnEmptyBook() throws Exception {
-        String uuid = "123";
-        Mockito.when(cartService.getCartItems(uuid)).thenReturn(List.of());
+        String userId = "1";
+        Mockito.when(cartService.getCartItems(userId)).thenReturn(List.of());
 
         mockMvc.perform(get("/cart-items"))
                 .andExpect(status().isOk())
@@ -56,12 +60,11 @@ public class CartControllerTest {
 
     @Test
     void shouldCreateCartItems() throws Exception{
+
+        CartRequest request = new CartRequest("1", "1", 1);
         mockMvc.perform(post("/cart-items")
-                        .param("id","123")
-                        .param("bookId", "1")
-                        .param("userId", "1")
-                        .param("qty", "1")
-                )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
     }
 }

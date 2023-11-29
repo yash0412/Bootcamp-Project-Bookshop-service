@@ -2,11 +2,7 @@ package org.bookshop;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -26,30 +22,26 @@ public class CartController {
 
     @GetMapping("cart-items")
     public ResponseEntity<Carts> getCartItems(){
-        String uuid = "123";
+        String userId = "1";
 
-        List<Cart> cartItems = cartService.getCartItems(uuid);
+        List<Cart> cartItems = cartService.getCartItems(userId);
         return ResponseEntity.ok(new Carts(cartItems));
     }
 
     @PostMapping("cart-items")
     public ResponseEntity <String> createCartItems(
-            @RequestParam(name = "id") String id,
-            @RequestParam (name = "bookId") String bookId,
-            @RequestParam (name = "userId") String userId,
-            @RequestParam (name = "qty") Integer qty
+            @RequestBody  CartRequest req
     ){
-
-
+        String uniqueID = UUID.randomUUID().toString();
         CartEntity cartEntity = cartService.createCartItem(
-                id,
-                bookId,
-                userId,
-                qty
+                uniqueID,
+                req.bookId(),
+                req.userId(),
+                req.qty()
         );
 
         URI location = URI.create("localhost:8080");
-        return ResponseEntity.created(location).header("MyResponseHeader", "MyValue").body("Hello World");
+        return ResponseEntity.created(location).header("MyResponseHeader", "MyValue").body("Added to cart successfully");
 
     }
 }
