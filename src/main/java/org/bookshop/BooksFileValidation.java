@@ -6,5 +6,5 @@ import java.util.List;
 
 
 public interface BooksFileValidation {
-    public List<Book> getUniqueBooksFromCSVFiles(List<MultipartFile> csvFiles);
+    public List<Book> getUniqueBooksFromCSVFiles(MultipartFile csvFile) throws Exception;
 }

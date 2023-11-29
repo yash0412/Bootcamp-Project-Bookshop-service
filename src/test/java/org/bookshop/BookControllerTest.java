@@ -41,9 +41,12 @@ public class BookControllerTest {
     void shouldReturnBook() throws Exception {
         Mockito.when(bookService.getAllBooks())
                 .thenReturn(List.of(new Book("abcd",
+                        "ISBN",
                         "Think And Grow Rich",
+                        "Description",
                         "Nepolean Hill",
-                        120.00, 50, "imageUrl")));
+                        "1980",
+                        120.00, 50, "imageUrl", "shortImage", 4.5)));
 
         mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
@@ -72,15 +75,18 @@ public class BookControllerTest {
         bookList.add("30faf58b-fd4e-46aa-aa18-964e95a4f56b");
         Mockito.when(bookService.getBooks(bookList))
                 .thenReturn(List.of(new Book("abcd",
-                "Think And Grow Rich",
-                "Nepolean Hill",
-                120.00, 50, "imageUrl")));
+                        "ISBN",
+                        "Think And Grow Rich",
+                        "Description",
+                        "Nepolean Hill",
+                        "1980",
+                        120.00, 50, "imageUrl", "shortImage", 4.5)));
 
         ListBookRequest request = new ListBookRequest(bookList);
 
         mockMvc.perform(post("/books-by-ids")
                         .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.books").isArray());
     }
@@ -92,13 +98,18 @@ public class BookControllerTest {
         bookList.add("30faf58b-fd4e-46aa-aa18-964e95a4f56b");
         Mockito.when(bookService.getBooks(bookList))
                 .thenReturn(List.of(new Book("b0ca96a9-d5d6-4f8b-8353-8d81e2222747",
+                        "ISBN",
                         "Think And Grow Rich",
+                        "Description",
                         "Nepolean Hill",
-                        120.00, 50, "imageUrl"),
-                        new Book("30faf58b-fd4e-46aa-aa18-964e95a4f56b",
-                                "Alchamist",
-                                "Paulo Coelho",
-                                520.00, 5, "imageUrl2")));
+                        "1980",
+                        120.00, 50, "imageUrl", "shortImage", 4.5), new Book("30faf58b-fd4e-46aa-aa18-964e95a4f56b",
+                        "ISBN",
+                        "Alchamist",
+                        "Description",
+                        "Paulo Coelho",
+                        "1980",
+                        520.00, 5, "imageUrl", "shortImage", 4.5)));
 
         ListBookRequest request = new ListBookRequest(bookList);
 
@@ -117,7 +128,6 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.books[1].price").value(520.00))
                 .andExpect(jsonPath("$.books[1].quantity").value(5));
     }
-
 
 
 }

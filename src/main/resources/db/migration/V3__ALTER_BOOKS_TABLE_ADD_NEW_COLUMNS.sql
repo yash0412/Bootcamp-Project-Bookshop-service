@@ -1,0 +1,5 @@
+ALTER TABLE BOOKS ADD COLUMN isbn VARCHAR(20) UNIQUE,
+    ADD COLUMN description VARCHAR(300),
+    ADD COLUMN publicationYear VARCHAR(4),
+    ADD COLUMN shortImageUrl VARCHAR(500),
+    ADD COLUMN averageRating NUMERIC(10, 2);

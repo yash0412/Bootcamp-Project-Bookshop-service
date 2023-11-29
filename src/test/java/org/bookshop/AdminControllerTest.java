@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,6 +23,8 @@ public class AdminControllerTest {
 
     @MockBean
     private BooksFileValidation fileValidator;
+    @MockBean
+    private BookService bookService;
 
     @Test
     void shouldBeAbleToReachAdminLoadBooksAndGet400WhenFilesAreNotSentInRequest() throws Exception {
@@ -38,10 +39,10 @@ public class AdminControllerTest {
                 Harry Potter,JK Rowling,330,https://google.com
                 Harry Potter,JK Rowling,330,https://google.com
                 """;
-        MockMultipartFile csvFile = new MockMultipartFile("files", "books.csv", "text/csv", csvData.getBytes());
-        Mockito.when(fileValidator.getUniqueBooksFromCSVFiles(List.of(csvFile, csvFile)))
+        MockMultipartFile csvFile = new MockMultipartFile("file", "books.csv", "text/csv", csvData.getBytes());
+        Mockito.when(fileValidator.getUniqueBooksFromCSVFiles(csvFile))
                 .thenReturn(List.of());
-        mockMvc.perform(multipart("/admin/loadBooks").file(csvFile).file(csvFile)).andExpect(status().isOk());
+        mockMvc.perform(multipart("/admin/loadBooks").file(csvFile)).andExpect(status().isOk());
     }
 
     @Test
@@ -53,12 +54,18 @@ public class AdminControllerTest {
                 Harry Potter,JK Rowling,330,https://google.com
                 Harry Potter,JK Rowling,330,https://google.com
                 """;
-        MultipartFile csvFile = new MockMultipartFile("files", "books.csv", "text/csv", csvData.getBytes());
+        MockMultipartFile csvFile = new MockMultipartFile("file", "books.csv", "text/csv", csvData.getBytes());
 
 
-        Mockito.when(fileValidator.getUniqueBooksFromCSVFiles(List.of(csvFile)))
-                .thenReturn(List.of(new Book("1", "Harry Potter", "JK Rowling", 330, 5, "https://google.com")));
-
+        Mockito.when(fileValidator.getUniqueBooksFromCSVFiles(csvFile))
+                .thenReturn(List.of(new Book("abcd",
+                        "ISBN",
+                        "Think And Grow Rich",
+                        "Description",
+                        "Napolean Hill",
+                        "1980",
+                        120.00, 50, "imageUrl", "shortImage", 4.5)));
+        mockMvc.perform(multipart("/admin/loadBooks").file(csvFile)).andExpect(status().isOk());
         Assertions.assertThat(true);
     }
 }
