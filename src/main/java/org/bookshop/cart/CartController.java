@@ -18,7 +18,7 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @GetMapping("cart-items")
+    @GetMapping("cart")
     public ResponseEntity<Cart> getCartItems(){
         String userId = "1";
 
@@ -26,7 +26,7 @@ public class CartController {
         return ResponseEntity.ok(new Cart(cartItems));
     }
 
-    @PostMapping("cart-items")
+    @PostMapping("cart")
     public ResponseEntity <String> createCartItems(
             @RequestBody CartRequest req
     ){
@@ -46,7 +46,7 @@ public class CartController {
 
     }
 
-    @PutMapping("cart-items")
+    @PutMapping("cart-item")
     public ResponseEntity <String> updateCartItems(
             @RequestBody  Item req
     ){

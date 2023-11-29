@@ -36,7 +36,7 @@ public class ItemControllerTest {
 
     @Test
     void getEmptyCartItems() throws Exception {
-        mockMvc.perform(get("/cart-items"))
+        mockMvc.perform(get("/cart"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items").isArray());
     }
@@ -45,7 +45,7 @@ public class ItemControllerTest {
     void shouldReturnCartItems() throws Exception{
         String userId = "1";
         Mockito.when(cartService.getCartItems(userId)).thenReturn((List.of(new Item("1", userId, "book-1", 1))));
-        mockMvc.perform(get("/cart-items"))
+        mockMvc.perform(get("/cart"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items[0].id").value("1"));
     }
@@ -55,7 +55,7 @@ public class ItemControllerTest {
         String userId = "1";
         Mockito.when(cartService.getCartItems(userId)).thenReturn(List.of());
 
-        mockMvc.perform(get("/cart-items"))
+        mockMvc.perform(get("/cart"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items").isEmpty());
     }
@@ -73,7 +73,7 @@ public class ItemControllerTest {
         CartRequest request = new CartRequest(cartItems);
 
 
-        mockMvc.perform(post("/cart-items")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
@@ -82,7 +82,7 @@ public class ItemControllerTest {
     @Test
     void shouldUpdateCartItems() throws Exception{
         CartItem request = new CartItem("1", "1", 1);
-        mockMvc.perform(put("/cart-items")
+        mockMvc.perform(put("/cart-item")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
