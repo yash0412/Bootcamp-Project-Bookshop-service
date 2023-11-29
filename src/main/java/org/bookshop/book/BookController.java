@@ -22,7 +22,7 @@ public class BookController {
         return ResponseEntity.ok(new Books(allBooks));
     }
 
-    @PostMapping("books-by-ids")
+    @PostMapping("books/serach-request")
     public ResponseEntity<Books> getBookList(@RequestBody ListBookRequest request) {
         List<Book> allBooks =bookService.getBooks(request.bookIdList());
         return ResponseEntity.ok(new Books(allBooks));

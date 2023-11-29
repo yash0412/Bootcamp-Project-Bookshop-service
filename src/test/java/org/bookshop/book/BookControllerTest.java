@@ -88,7 +88,7 @@ public class BookControllerTest {
 
         ListBookRequest request = new ListBookRequest(bookList);
 
-        mockMvc.perform(post("/books-by-ids")
+        mockMvc.perform(post("/books/serach-request")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -117,7 +117,7 @@ public class BookControllerTest {
 
         ListBookRequest request = new ListBookRequest(bookList);
 
-        mockMvc.perform(post("/books-by-ids")
+        mockMvc.perform(post("/books/serach-request")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
