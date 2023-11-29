@@ -23,7 +23,7 @@ public class BookController {
         return ResponseEntity.ok(new Books(allBooks));
     }
 
-    @PostMapping("booksByIds")
+    @PostMapping("books-by-ids")
     public ResponseEntity<Books> getBookList(@RequestBody ListBookRequest request) {
         List<Book> allBooks =bookService.getBooks(request.bookIdList());
         return ResponseEntity.ok(new Books(allBooks));
