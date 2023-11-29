@@ -19,8 +19,7 @@ public class CartController {
     }
 
     @GetMapping("cart")
-    public ResponseEntity<Cart> getCartItems(){
-        String userId = "1";
+    public ResponseEntity<Cart> getCartItems(@RequestHeader(value = "userId", required = true) String userId){
 
         List<Item> cartItems = cartService.getCartItems(userId);
         return ResponseEntity.ok(new Cart(cartItems));
@@ -28,7 +27,8 @@ public class CartController {
 
     @PostMapping("cart")
     public ResponseEntity <String> createCartItems(
-            @RequestBody CartRequest req
+            @RequestBody CartRequest req,
+            @RequestHeader(value = "userId", required = true) String userId
     ){
 
         for (CartItem item:req.cartItems()){
@@ -36,7 +36,7 @@ public class CartController {
             CartEntity cartEntity = cartService.createCartItem(
                     uniqueID,
                     item.bookId(),
-                    item.userId(),
+                    userId,
                     item.qty()
             );
         }
@@ -48,11 +48,12 @@ public class CartController {
 
     @PutMapping("cart-item")
     public ResponseEntity <String> updateCartItems(
-            @RequestBody  Item req
+            @RequestBody  Item req,
+            @RequestHeader(value = "userId", required = true) String userId
     ){
         cartService.updateCartItem(
                 req.bookId(),
-                req.userId(),
+                userId,
                 req.qty()
         );
 
