@@ -1,4 +1,6 @@
 package org.bookshop;
 
-public record CartRequest(String bookId,  String userId, Integer qty) {
+import java.util.List;
+
+public record CartRequest(List<CartItem> cartItems) {
 }

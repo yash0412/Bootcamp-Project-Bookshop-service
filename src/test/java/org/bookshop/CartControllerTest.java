@@ -11,12 +11,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,7 +60,16 @@ public class CartControllerTest {
     @Test
     void shouldCreateCartItems() throws Exception{
 
-        CartRequest request = new CartRequest("1", "1", 1);
+        CartItem item1 = new CartItem("1", "1", 1);
+        CartItem item2 = new CartItem("2", "1", 5);
+
+        List<CartItem> cartItems = new ArrayList<CartItem>();
+        cartItems.add(item1);
+        cartItems.add(item2);
+
+        CartRequest request = new CartRequest(cartItems);
+
+
         mockMvc.perform(post("/cart-items")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))

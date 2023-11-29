@@ -1,9 +1,7 @@
 package org.bookshop;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -30,15 +28,18 @@ public class CartController {
 
     @PostMapping("cart-items")
     public ResponseEntity <String> createCartItems(
-            @RequestBody  CartRequest req
+            @RequestBody CartRequest req
     ){
-        String uniqueID = UUID.randomUUID().toString();
-        CartEntity cartEntity = cartService.createCartItem(
-                uniqueID,
-                req.bookId(),
-                req.userId(),
-                req.qty()
-        );
+
+        for (CartItem item:req.cartItems()){
+            String uniqueID = UUID.randomUUID().toString();
+            CartEntity cartEntity = cartService.createCartItem(
+                    uniqueID,
+                    item.bookId(),
+                    item.userId(),
+                    item.qty()
+            );
+        }
 
         URI location = URI.create("localhost:8080");
         return ResponseEntity.created(location).header("MyResponseHeader", "MyValue").body("Added to cart successfully");
