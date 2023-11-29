@@ -1,7 +1,6 @@
 package org.bookshop.admin;
 
 import org.assertj.core.api.Assertions;
-import org.bookshop.admin.AdminController;
 import org.bookshop.book.Book;
 import org.bookshop.book.BookService;
 import org.bookshop.book.BooksFileValidation;
@@ -32,7 +31,7 @@ public class AdminControllerTest {
 
     @Test
     void shouldBeAbleToReachAdminLoadBooksAndGet400WhenFilesAreNotSentInRequest() throws Exception {
-        mockMvc.perform(multipart("/admin/loadBooks")).andExpect(status().isBadRequest());
+        mockMvc.perform(multipart("/admin/loadBooksRequest")).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -46,7 +45,7 @@ public class AdminControllerTest {
         MockMultipartFile csvFile = new MockMultipartFile("file", "books.csv", "text/csv", csvData.getBytes());
         Mockito.when(fileValidator.getUniqueBooksFromCSVFiles(csvFile))
                 .thenReturn(List.of());
-        mockMvc.perform(multipart("/admin/loadBooks").file(csvFile)).andExpect(status().isOk());
+        mockMvc.perform(multipart("/admin/loadBooksRequest").file(csvFile)).andExpect(status().isOk());
     }
 
     @Test
@@ -69,7 +68,7 @@ public class AdminControllerTest {
                         "Napolean Hill",
                         "1980",
                         120.00, 50, "imageUrl", "shortImage", 4.5)));
-        mockMvc.perform(multipart("/admin/loadBooks").file(csvFile)).andExpect(status().isOk());
+        mockMvc.perform(multipart("/admin/loadBooksRequest").file(csvFile)).andExpect(status().isOk());
         Assertions.assertThat(true);
     }
 }

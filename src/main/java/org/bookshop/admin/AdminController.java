@@ -1,10 +1,10 @@
 package org.bookshop.admin;
 
 
-import org.bookshop.book.BookService;
-import org.springframework.http.ResponseEntity;
 import org.bookshop.book.Book;
+import org.bookshop.book.BookService;
 import org.bookshop.book.BooksFileValidation;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +23,7 @@ public class AdminController {
         this.bookService = bookService;
     }
 
-    @PostMapping("loadBooks")
+    @PostMapping("loadBooksRequest")
     public ResponseEntity<LoadBooksResponse> loadBooks(@RequestParam("file") MultipartFile file) throws Exception {
         List<Book> uniqueBooks = this.fileValidator.getUniqueBooksFromCSVFiles(file);
         int successSaveCount = bookService.loadBooks(uniqueBooks);
