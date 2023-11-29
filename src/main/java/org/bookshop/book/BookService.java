@@ -1,4 +1,4 @@
-package org.bookshop;
+package org.bookshop.book;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;

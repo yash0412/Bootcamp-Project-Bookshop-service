@@ -1,4 +1,4 @@
-package org.bookshop;
+package org.bookshop.cart;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

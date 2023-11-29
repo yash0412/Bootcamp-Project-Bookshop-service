@@ -1,4 +1,6 @@
-package org.bookshop;
+package org.bookshop.book;
+
+import org.bookshop.book.Book;
 
 import java.util.List;
 

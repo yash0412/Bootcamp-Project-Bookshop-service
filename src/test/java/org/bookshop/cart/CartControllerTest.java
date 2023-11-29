@@ -1,7 +1,8 @@
-package org.bookshop;
+package org.bookshop.cart;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bookshop.cart.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import java.util.List;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -85,4 +88,13 @@ public class CartControllerTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
     }
+
+//    @Test
+//    void shouldDeleteCartItems() throws Exception{
+//        CartItem request = new CartItem("1", "1", 1);
+//        mockMvc.perform(delete("/cart-items")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(request)))
+//                .andExpect(status().isOk());
+//    }
 }

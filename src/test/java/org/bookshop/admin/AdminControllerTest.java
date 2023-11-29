@@ -1,6 +1,10 @@
-package org.bookshop;
+package org.bookshop.admin;
 
 import org.assertj.core.api.Assertions;
+import org.bookshop.admin.AdminController;
+import org.bookshop.book.Book;
+import org.bookshop.book.BookService;
+import org.bookshop.book.BooksFileValidation;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

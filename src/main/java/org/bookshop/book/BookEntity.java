@@ -1,4 +1,4 @@
-package org.bookshop;
+package org.bookshop.book;
 
 
 import jakarta.persistence.Column;

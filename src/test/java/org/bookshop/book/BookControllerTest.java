@@ -1,6 +1,10 @@
-package org.bookshop;
+package org.bookshop.book;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bookshop.book.Book;
+import org.bookshop.book.BookController;
+import org.bookshop.book.BookService;
+import org.bookshop.book.ListBookRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

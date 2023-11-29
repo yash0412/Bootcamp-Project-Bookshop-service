@@ -1,7 +1,10 @@
-package org.bookshop;
+package org.bookshop.book;
 
 
 import org.assertj.core.api.Assertions;
+import org.bookshop.book.BadFileException;
+import org.bookshop.book.Book;
+import org.bookshop.book.BooksFileValidationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;

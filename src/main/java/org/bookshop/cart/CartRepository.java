@@ -1,4 +1,4 @@
-package org.bookshop;
+package org.bookshop.cart;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,6 +1,10 @@
-package org.bookshop;
+package org.bookshop.cart;
 
 import org.assertj.core.api.Assertions;
+import org.bookshop.cart.Cart;
+import org.bookshop.cart.CartEntity;
+import org.bookshop.cart.CartRepository;
+import org.bookshop.cart.CartService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

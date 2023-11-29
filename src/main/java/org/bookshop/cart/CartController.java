@@ -1,4 +1,4 @@
-package org.bookshop;
+package org.bookshop.cart;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,4 +60,15 @@ public class CartController {
         return ResponseEntity.created(location).header("MyResponseHeader", "MyValue").body("Updated cart successfully");
 
     }
+
+//    @DeleteMapping("cart-item")
+//    public ResponseEntity <String> deleteCartItem(
+//            @RequestBody  CartItem req
+//    ) {
+//         cartService.deleteCartItem(
+//                 req.bookId(),
+//                 req.userId()
+//         );
+//
+//    }
 }

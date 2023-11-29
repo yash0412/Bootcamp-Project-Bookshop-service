@@ -1,4 +1,4 @@
-package org.bookshop;
+package org.bookshop.book;
 
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
