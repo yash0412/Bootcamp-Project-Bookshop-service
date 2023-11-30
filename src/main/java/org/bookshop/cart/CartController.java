@@ -40,7 +40,7 @@ public class CartController {
         }
 
         URI location = URI.create("localhost:8080");
-        return ResponseEntity.created(location).header("MyResponseHeader", "MyValue").body("Added to cart successfully");
+        return ResponseEntity.created(location).build();
 
     }
 
@@ -56,8 +56,7 @@ public class CartController {
                 req.qty()
         );
 
-        URI location = URI.create("localhost:8080");
-        return ResponseEntity.created(location).header("MyResponseHeader", "MyValue").body("Updated cart successfully");
+        return ResponseEntity.noContent().build();
 
     }
 

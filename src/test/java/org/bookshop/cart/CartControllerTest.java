@@ -100,7 +100,7 @@ public class CartControllerTest {
         mockMvc.perform(patch("/cart-item/1").header("userId", "jhon22")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isNoContent());
     }
 
     @Test
