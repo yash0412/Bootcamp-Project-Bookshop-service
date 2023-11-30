@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CartRepository extends JpaRepository<CartEntity,  UserBookKey>{
-    List<CartEntity> findCartEntitiesById(UserBookKey userBookId);
+    CartEntity findCartEntityById(UserBookKey userBookId);
 
     List<CartEntity> findCartEntitiesById_UserId(String userid);
 }

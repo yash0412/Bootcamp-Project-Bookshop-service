@@ -51,15 +51,13 @@ public class CartService {
 
     public void updateCartItem(String bookId, String userId, Integer qty) {
         UserBookKey userBookId = new UserBookKey(userId, bookId);
-        List<CartEntity> cartEntity = cartRepository.findCartEntitiesById(userBookId);
-
-        for (CartEntity items : cartEntity) {
-            items.qty = qty;
-            cartRepository.saveAndFlush(
-                    items
-            );
-        }
+        CartEntity cartEntity = cartRepository.findCartEntityById(userBookId);
+        cartEntity.qty = qty;
+        cartRepository.saveAndFlush(
+            cartEntity
+        );
     }
+
 
     public void deleteCartItem(String userId, String bookId) {
         UserBookKey userBookId = new UserBookKey(userId, bookId);

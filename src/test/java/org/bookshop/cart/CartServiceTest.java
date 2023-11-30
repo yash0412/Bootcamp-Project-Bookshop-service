@@ -60,8 +60,8 @@ public class CartServiceTest {
         UserBookKey userBookKey = new UserBookKey("1", "123");
         CartEntity cartEntity = new CartEntity(userBookKey,
                 100);
-        Mockito.when(repository.findCartEntitiesById(userBookKey)).
-                thenReturn(List.of(cartEntity));
+        Mockito.when(repository.findCartEntityById(userBookKey)).
+                thenReturn(cartEntity);
         cartService.updateCartItem(
                 "123",
                 "1",
