@@ -23,7 +23,7 @@ public class BookServiceTest {
 
     @Test
     void shouldGetAllBooksFromRepository() {
-        Mockito.when(bookRepository.findAll())
+        Mockito.when(bookRepository.findFirst50By())
                 .thenReturn(List.of(new BookEntity("someid",
                         "ISBN",
                         "Think And Grow Rich",

@@ -16,7 +16,7 @@ public class BookService {
     }
 
     public List<Book> getAllBooks() {
-        return bookRepository.findAll()
+        return bookRepository.findFirst50By()
                 .stream()
                 .map(bookEntity -> new Book(bookEntity.id,
                         bookEntity.isbn,
