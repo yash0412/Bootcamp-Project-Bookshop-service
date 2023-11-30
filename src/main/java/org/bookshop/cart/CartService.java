@@ -39,7 +39,8 @@ public class CartService {
 
     public void createCartItem(UserBookKey id, Integer qty) {
         boolean bookExist = bookService.isBookExist(id.getBookId());
-        if (bookExist) {
+        boolean bookExistInCart = cartRepository.existsById(id);
+        if (bookExist && !bookExistInCart) {
             cartRepository.saveAndFlush(
                     new CartEntity(
                             id,
