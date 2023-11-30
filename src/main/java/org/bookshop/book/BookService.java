@@ -11,7 +11,6 @@ import java.util.Map;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final int BATCH_SIZE = 1000;
 
     public BookService(BookRepository bookRepo) {
 
@@ -56,7 +55,8 @@ public class BookService {
 
     public int loadBooks(List<Book> books) {
         int saveSuccessCount = 0;
-        int numberOfBatches = (int) Math.ceil(((double) books.size() / this.BATCH_SIZE));
+        int BATCH_SIZE = 1000;
+        int numberOfBatches = (int) Math.ceil(((double) books.size() / BATCH_SIZE));
         for (int index = 0; index < numberOfBatches; index++) {
             int endIndex = index * BATCH_SIZE + BATCH_SIZE;
             if (endIndex > books.size()) {
@@ -85,7 +85,7 @@ public class BookService {
             try {
                 bookRepository.saveAll(booksToBeInserted);
                 saveSuccessCount += booksToBeInserted.size();
-                System.out.println("Successfully inserted batch: " + (index + 1));
+                System.out.printf("Successfully inserted batch %d of %d ", (index + 1), numberOfBatches);
             } catch (Exception e) {
                 System.out.printf("Exception while inserting batch %d, error: %s \n", (index + 1), e.toString());
                 throw e;
@@ -97,7 +97,7 @@ public class BookService {
     private List<BookEntity> getNewBooks(List<BookEntity> books) {
         List<IsbnOnly> existingBooksIsbnList = bookRepository.findBookEntitiesByIsbnIn(books.stream().map(bookEntity -> bookEntity.isbn).toList());
         Map<String, Boolean> existingBooksIsbnMap = new HashMap<>();
-        System.out.printf("Found %d duplicate ISBNs in input data, filtering them out\n", existingBooksIsbnList.size());
+        System.out.printf("Found %d duplicate ISBNs in input data\n", existingBooksIsbnList.size());
         existingBooksIsbnList.forEach(isbnOnly -> existingBooksIsbnMap.put(isbnOnly.getIsbn(), true));
         List<BookEntity> newBooks = new ArrayList<>();
         books.forEach(bookEntity -> {
