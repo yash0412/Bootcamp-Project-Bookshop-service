@@ -1,6 +1,5 @@
 package org.bookshop.cart;
 
-import jakarta.websocket.server.PathParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,13 +60,13 @@ public class CartController {
     }
 
     @DeleteMapping("cart-item/{book-id}")
-    public ResponseEntity <String> deleteCartItem(
+    public ResponseEntity<String> deleteCartItem(
             @PathVariable("book-id") String bookId,
             @RequestHeader(value = "userId", required = true) String userId
     ) {
-         cartService.deleteCartItem(
-                 userId, bookId
-         );
+        cartService.deleteCartItem(
+                userId, bookId
+        );
         return ResponseEntity.ok("Deleted Successfully");
     }
 
@@ -76,7 +75,7 @@ public class CartController {
             @RequestHeader(value = "userId", required = true) String userId
     ) {
         CheckoutValidationResponse checkoutValidationResponse = cartService.validateCheckout(userId);
-        if (checkoutValidationResponse.error().equals("")) {
+        if (checkoutValidationResponse.error().isEmpty()) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.unprocessableEntity().body(checkoutValidationResponse);
