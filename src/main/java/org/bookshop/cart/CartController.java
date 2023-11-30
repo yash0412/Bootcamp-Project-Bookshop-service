@@ -44,7 +44,7 @@ public class CartController {
 
     }
 
-    @PutMapping("cart-item")
+    @PatchMapping("cart-item")
     public ResponseEntity<String> updateCartItems(
             @RequestBody Item req,
             @RequestHeader(value = "userId", required = true) String userId
