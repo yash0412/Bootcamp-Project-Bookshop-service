@@ -60,4 +60,16 @@ public class ItemServiceTest {
         );
         Mockito.verify(repository, Mockito.times(1)).saveAndFlush(cartEntity);
     }
+
+    @Test
+    void shouldDeleteCartItemSuccessfully(){
+        CartRepository repository =  Mockito.mock(CartRepository.class);
+        CartService cartService = new CartService(repository);
+        UserBookKey userBookKey = new UserBookKey("1", "123");
+        cartService.deleteCartItem(
+                "1",
+                "123"
+        );
+        Mockito.verify(repository, Mockito.times(1)).deleteById(userBookKey);
+    }
 }

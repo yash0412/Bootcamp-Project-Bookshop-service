@@ -2,6 +2,7 @@ package org.bookshop.cart;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {
@@ -39,5 +40,10 @@ public class CartService {
                     items
             );
         }
+    }
+
+    public void deleteCartItem(String userId, String bookId) {
+        UserBookKey userBookId = new UserBookKey(userId, bookId);
+        cartRepository.deleteById(userBookId);
     }
 }

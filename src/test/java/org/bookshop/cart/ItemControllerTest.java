@@ -90,12 +90,10 @@ public class ItemControllerTest {
                 .andExpect(status().isCreated());
     }
 
-//    @Test
-//    void shouldDeleteCartItems() throws Exception{
-//        CartItem request = new CartItem("1", "1", 1);
-//        mockMvc.perform(delete("/cart-items")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(request)))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    void shouldDeleteCartItems() throws Exception{
+        mockMvc.perform(delete("/cart-item/123").header("userId", "jhon22")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 }
