@@ -22,6 +22,7 @@ public class CartController {
     public ResponseEntity<Cart> getCartItems(@RequestHeader(value = "userId", required = true) String userId){
 
         List<Item> cartItems = cartService.getCartItems(userId);
+
         return ResponseEntity.ok(new Cart(cartItems));
     }
 
@@ -32,11 +33,8 @@ public class CartController {
     ){
 
         for (CartItem item:req.cartItems()){
-            String uniqueID = UUID.randomUUID().toString();
             CartEntity cartEntity = cartService.createCartItem(
-                    uniqueID,
-                    item.bookId(),
-                    userId,
+                    new UserBookKey(userId, item.bookId()),
                     item.qty()
             );
         }

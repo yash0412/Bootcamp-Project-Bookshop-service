@@ -13,26 +13,25 @@ public class CartService {
     }
 
     public List<Item> getCartItems(String userId) {
-        return cartRepository.findAll()
+        UserBookKey userBookId = new UserBookKey(userId,null);
+        return cartRepository.findCartEntitiesById_UserId(userId)
                 .stream()
-                .filter(cartEntity -> cartEntity.userId.equals(userId)).
-                map(cartEntity -> new Item(cartEntity.id, cartEntity.userId, cartEntity.bookId, cartEntity.qty))
+                .map(cartEntity -> new Item(cartEntity.id.getBookId(), cartEntity.qty))
                 .toList();
     }
 
-    public CartEntity createCartItem(String id, String bookId, String userId, Integer qty) {
+    public CartEntity createCartItem(UserBookKey id, Integer qty) {
         return cartRepository.saveAndFlush(
                 new CartEntity(
                         id,
-                        bookId,
-                        userId,
                         qty
                 )
         );
     }
 
     public void updateCartItem(String bookId, String userId, Integer qty) {
-        List<CartEntity> cartEntity = cartRepository.findCartEntitiesByBookIdAndUserId(bookId, userId);
+        UserBookKey userBookId = new UserBookKey(userId, bookId);
+        List<CartEntity> cartEntity = cartRepository.findCartEntitiesById(userBookId);
 
         for (CartEntity items:cartEntity) {
             items.qty = qty;

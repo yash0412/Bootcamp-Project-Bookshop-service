@@ -8,30 +8,26 @@ import java.util.Objects;
 @Entity
 @Table(name = "carts")
 public class CartEntity {
+    @EmbeddedId
+    UserBookKey id;
 
-    @Id
-    String id;
-
-    @Column(name = "bookid")
-    String  bookId;
-    @Column(name = "userid")
-    String userId;
+//    @Column(name = "bookid")
+//    String  bookId;
+//    @Column(name = "userid")
+//    String userId;
     Integer qty;
 
     Timestamp createdDate;
     Timestamp updatedDate;
 
     public CartEntity(
-            String id,
-            String bookId,
-            String  userId,
+            UserBookKey id,
             Integer qty
     ) {
         this.id = id;
-        this.bookId = bookId;
-        this.userId = userId;
         this.qty = qty;
         this.createdDate = new Timestamp(System.currentTimeMillis());
+        this.updatedDate = new Timestamp(System.currentTimeMillis());
     }
 
     public CartEntity() {
@@ -42,13 +38,10 @@ public class CartEntity {
     public String toString() {
         return "CartEntity{" +
                 "id='" + id + '\'' +
-                ", bookId='" + bookId + '\'' +
-                ", userId='" + userId + '\'' +
                 ", qty=" + qty +
                 '}';
     }
-
-   @Override
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof CartEntity that)) return false;

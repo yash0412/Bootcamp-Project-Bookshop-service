@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -43,11 +44,12 @@ public class ItemControllerTest {
 
     @Test
     void shouldReturnCartItems() throws Exception{
+
         String userId = "jhon22";
-        Mockito.when(cartService.getCartItems(userId)).thenReturn((List.of(new Item("1", userId, "book-1", 1))));
+        Mockito.when(cartService.getCartItems(userId)).thenReturn((List.of(new Item("book-1", 1))));
         mockMvc.perform(get("/cart").header("userId", userId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items[0].id").value("1"));
+                .andExpect(jsonPath("$.items[0].bookId").value("book-1"));
     }
 
     @Test
