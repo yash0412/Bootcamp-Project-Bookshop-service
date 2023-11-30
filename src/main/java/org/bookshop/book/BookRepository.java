@@ -10,4 +10,8 @@ public interface BookRepository extends JpaRepository<BookEntity, String> {
     List<BookEntity> findFirst50By();
 
     List<IsbnOnly> findBookEntitiesByIsbnIn(List<String> isbn);
+
+    BookEntity findBookEntityById(String id);
+
+    boolean existsById(String id);
 }

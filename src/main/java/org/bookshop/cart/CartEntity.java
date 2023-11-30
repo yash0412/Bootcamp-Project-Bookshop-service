@@ -10,11 +10,6 @@ import java.util.Objects;
 public class CartEntity {
     @EmbeddedId
     UserBookKey id;
-
-//    @Column(name = "bookid")
-//    String  bookId;
-//    @Column(name = "userid")
-//    String userId;
     Integer qty;
 
     Timestamp createdDate;

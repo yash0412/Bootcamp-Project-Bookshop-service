@@ -108,4 +108,25 @@ public class BookService {
         System.out.printf("Found %d new books\n", newBooks.size());
         return newBooks;
     }
+
+    public Book getBookById(String bookId) {
+        BookEntity bookEntity = bookRepository.findBookEntityById(bookId);
+        return new Book(
+                bookEntity.id,
+                bookEntity.isbn,
+                bookEntity.title,
+                bookEntity.description,
+                bookEntity.author,
+                bookEntity.publicationYear,
+                bookEntity.price,
+                bookEntity.quantity,
+                bookEntity.imageUrl,
+                bookEntity.shortImageUrl,
+                bookEntity.averageRating
+        );
+    }
+
+    public boolean isBookExist(String bookId) {
+        return bookRepository.existsById(bookId);
+    }
 }

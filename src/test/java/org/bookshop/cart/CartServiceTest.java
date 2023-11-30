@@ -34,11 +34,8 @@ public class CartServiceTest {
                         1)));
 
         CartService cartService = new CartService(repository, bookService);
-
-        List<Item> expectedBooks = List.of(new Item(
-                "123",
-                1));
-        List<Item> allItemItems = cartService.getCartItems("123");
+        List<CartDetails> expectedBooks = List.of();
+        List<CartDetails> allItemItems = cartService.getCartItems("123");
 
         Assertions.assertThat(allItemItems).containsAll(expectedBooks);
     }
@@ -46,6 +43,8 @@ public class CartServiceTest {
     @Test
     void shouldCreateCartItem() {
         CartService cartService = new CartService(repository, bookService);
+        Mockito.when(bookService.isBookExist("1")).
+                thenReturn(true);
         UserBookKey userBookKey = new UserBookKey("1", "1");
         CartEntity cartEntity = new CartEntity(userBookKey, 1);
         cartService.createCartItem(

@@ -21,21 +21,32 @@ public class CartService {
         this.bookService = bookService;
     }
 
-    public List<Item> getCartItems(String userId) {
+    public List<CartDetails> getCartItems(String userId) {
         UserBookKey userBookId = new UserBookKey(userId, null);
-        return cartRepository.findCartEntitiesById_UserId(userId)
+        List<Item>  list =  cartRepository.findCartEntitiesById_UserId(userId)
                 .stream()
                 .map(cartEntity -> new Item(cartEntity.id.getBookId(), cartEntity.qty))
                 .toList();
+
+        List<CartDetails> cartList = new ArrayList<>();
+
+        for (Item item :list) {
+            Book book = bookService.getBookById(item.bookId());
+            cartList.add(new CartDetails(item.qty(), book)) ;
+        }
+        return cartList;
     }
 
-    public CartEntity createCartItem(UserBookKey id, Integer qty) {
-        return cartRepository.saveAndFlush(
-                new CartEntity(
-                        id,
-                        qty
-                )
-        );
+    public void createCartItem(UserBookKey id, Integer qty) {
+        boolean bookExist = bookService.isBookExist(id.getBookId());
+        if (bookExist) {
+            cartRepository.saveAndFlush(
+                    new CartEntity(
+                            id,
+                            qty
+                    )
+            );
+        }
     }
 
     public void updateCartItem(String bookId, String userId, Integer qty) {

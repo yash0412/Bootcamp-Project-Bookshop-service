@@ -2,6 +2,7 @@ package org.bookshop.cart;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bookshop.book.Book;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +40,29 @@ public class CartControllerTest {
 
     @Test
     void shouldReturnCartItems() throws Exception {
+        CartDetails cartDetails = new CartDetails(
+                1,
+                new Book(
+                        "1",
+                        "0671038850",
+                        "A Stitch in Time (Star Trek: Deep Space Nine)",
+                        "A Stitch in Time Star Trek Deep Space Nine",
+                        "Andrew J. Robinson",
+                        "2000",
+                        359.55,
+                        3,
+                        "http://images.amazon.com/images/P/0671038850.01.LZZZZZZZ.jpg",
+                        "http://images.amazon.com/images/P/0671038850.01.MZZZZZZZ.jpg",
+                        3.4
+
+                )
+        );
 
         String userId = "jhon22";
-        Mockito.when(cartService.getCartItems(userId)).thenReturn((List.of(new Item("book-1", 1))));
+        Mockito.when(cartService.getCartItems(userId)).thenReturn(List.of(cartDetails));
         mockMvc.perform(get("/cart").header("userId", userId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items[0].bookId").value("book-1"));
+                .andExpect(jsonPath("$.items[0].book.id").value("1"));
     }
 
     @Test

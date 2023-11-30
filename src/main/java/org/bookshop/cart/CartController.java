@@ -21,7 +21,7 @@ public class CartController {
     @GetMapping("cart")
     public ResponseEntity<Cart> getCartItems(@RequestHeader(value = "userId", required = true) String userId) {
 
-        List<Item> cartItems = cartService.getCartItems(userId);
+        List<CartDetails> cartItems = cartService.getCartItems(userId);
 
         return ResponseEntity.ok(new Cart(cartItems));
     }
@@ -33,7 +33,7 @@ public class CartController {
     ) {
 
         for (CartItem item : req.cartItems()) {
-            CartEntity cartEntity = cartService.createCartItem(
+            cartService.createCartItem(
                     new UserBookKey(userId, item.bookId()),
                     item.qty()
             );
