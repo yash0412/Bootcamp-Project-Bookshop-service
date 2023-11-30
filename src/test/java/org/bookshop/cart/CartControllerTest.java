@@ -86,7 +86,7 @@ public class CartControllerTest {
     }
 
     @Test
-    void shouldDeleteCartItems() throws Exception{
+    void shouldDeleteCartItems() throws Exception {
         mockMvc.perform(delete("/cart-item/123").header("userId", "jhon22")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -117,8 +117,8 @@ public class CartControllerTest {
                 ));
         mockMvc.perform(get("/checkoutValidation").header("userId", "jhon22"))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(jsonPath("$.errorDetails[0].bookId").value("123"))
-                .andExpect(jsonPath("$.errorDetails[0].bookName").value("Book 1"))
+                .andExpect(jsonPath("$.errorDetails[0].id").value("123"))
+                .andExpect(jsonPath("$.errorDetails[0].title").value("Book 1"))
                 .andExpect(jsonPath("$.errorDetails[0].availableQuantity").value(2));
     }
 }
