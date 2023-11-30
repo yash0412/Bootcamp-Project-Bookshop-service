@@ -87,7 +87,7 @@ public class BookService {
                 saveSuccessCount += booksToBeInserted.size();
                 System.out.printf("Successfully inserted batch %d of %d ", (index + 1), numberOfBatches);
             } catch (Exception e) {
-                System.out.printf("Exception while inserting batch %d, error: %s \n", (index + 1), e.toString());
+                System.out.printf("Exception while inserting batch %d, error: %s \n", (index + 1), e);
                 throw e;
             }
         }
