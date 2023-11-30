@@ -97,7 +97,7 @@ public class CartControllerTest {
     @Test
     void shouldUpdateCartItems() throws Exception {
         CartItem request = new CartItem("1", "1", 1);
-        mockMvc.perform(patch("/cart-item").header("userId", "jhon22")
+        mockMvc.perform(patch("/cart-item/1").header("userId", "jhon22")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());

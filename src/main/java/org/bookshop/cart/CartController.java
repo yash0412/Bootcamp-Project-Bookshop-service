@@ -44,13 +44,14 @@ public class CartController {
 
     }
 
-    @PatchMapping("cart-item")
+    @PatchMapping("cart-item/{book-id}")
     public ResponseEntity<String> updateCartItems(
+            @PathVariable("book-id") String bookId,
             @RequestBody Item req,
             @RequestHeader(value = "userId", required = true) String userId
     ) {
         cartService.updateCartItem(
-                req.bookId(),
+                bookId,
                 userId,
                 req.qty()
         );
