@@ -6,21 +6,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 
 @CrossOrigin
 @RestController
 public class CartController {
 
-    private CartService cartService;
+    private final CartService cartService;
 
     public CartController(final CartService cartService) {
         this.cartService = cartService;
     }
 
     @GetMapping("cart")
-    public ResponseEntity<Cart> getCartItems(@RequestHeader(value = "userId", required = true) String userId){
+    public ResponseEntity<Cart> getCartItems(@RequestHeader(value = "userId", required = true) String userId) {
 
         List<Item> cartItems = cartService.getCartItems(userId);
 
@@ -28,12 +27,12 @@ public class CartController {
     }
 
     @PostMapping("cart")
-    public ResponseEntity <String> createCartItems(
+    public ResponseEntity<String> createCartItems(
             @RequestBody CartRequest req,
             @RequestHeader(value = "userId", required = true) String userId
-    ){
+    ) {
 
-        for (CartItem item:req.cartItems()){
+        for (CartItem item : req.cartItems()) {
             CartEntity cartEntity = cartService.createCartItem(
                     new UserBookKey(userId, item.bookId()),
                     item.qty()
@@ -46,10 +45,10 @@ public class CartController {
     }
 
     @PutMapping("cart-item")
-    public ResponseEntity <String> updateCartItems(
-            @RequestBody  Item req,
+    public ResponseEntity<String> updateCartItems(
+            @RequestBody Item req,
             @RequestHeader(value = "userId", required = true) String userId
-    ){
+    ) {
         cartService.updateCartItem(
                 req.bookId(),
                 userId,
@@ -70,5 +69,17 @@ public class CartController {
                  userId, bookId
          );
         return ResponseEntity.ok("Deleted Successfully");
+    }
+
+    @GetMapping("checkoutValidation")
+    public ResponseEntity<?> checkoutValidation(
+            @RequestHeader(value = "userId", required = true) String userId
+    ) {
+        CheckoutValidationResponse checkoutValidationResponse = cartService.validateCheckout(userId);
+        if (checkoutValidationResponse.error().equals("")) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.unprocessableEntity().body(checkoutValidationResponse);
+        }
     }
 }

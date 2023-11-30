@@ -13,19 +13,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CartController.class)
 @AutoConfigureMockMvc
-public class ItemControllerTest {
+public class CartControllerTest {
     @Autowired
     MockMvc mockMvc;
 
@@ -43,7 +38,7 @@ public class ItemControllerTest {
     }
 
     @Test
-    void shouldReturnCartItems() throws Exception{
+    void shouldReturnCartItems() throws Exception {
 
         String userId = "jhon22";
         Mockito.when(cartService.getCartItems(userId)).thenReturn((List.of(new Item("book-1", 1))));
@@ -63,7 +58,7 @@ public class ItemControllerTest {
     }
 
     @Test
-    void shouldCreateCartItems() throws Exception{
+    void shouldCreateCartItems() throws Exception {
 
         CartItem item1 = new CartItem("1", "1", 1);
         CartItem item2 = new CartItem("2", "1", 5);
@@ -76,17 +71,17 @@ public class ItemControllerTest {
 
 
         mockMvc.perform(post("/cart").header("userId", "jhon22")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    void shouldUpdateCartItems() throws Exception{
+    void shouldUpdateCartItems() throws Exception {
         CartItem request = new CartItem("1", "1", 1);
         mockMvc.perform(put("/cart-item").header("userId", "jhon22")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
     }
 
@@ -95,5 +90,35 @@ public class ItemControllerTest {
         mockMvc.perform(delete("/cart-item/123").header("userId", "jhon22")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldValidateCheckoutRequestSuccess() throws Exception {
+        Mockito.when(cartService.validateCheckout("jhon22"))
+                .thenReturn(new CheckoutValidationResponse("", List.of()));
+        mockMvc.perform(get("/checkoutValidation").header("userId", "jhon22"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldValidateCheckoutRequestReturnUnprocessableEntity() throws Exception {
+        Mockito.when(cartService.validateCheckout("jhon22"))
+                .thenReturn(new CheckoutValidationResponse("Invalid Cart", List.of()));
+        mockMvc.perform(get("/checkoutValidation").header("userId", "jhon22"))
+                .andExpect(status().isUnprocessableEntity()).andExpect(jsonPath("$.error")
+                        .value("Invalid Cart"));
+    }
+
+    @Test
+    void shouldValidateCheckoutRequestReturnUnprocessableEntityWithListOfBooksAndAvailableQuantity() throws Exception {
+        Mockito.when(cartService.validateCheckout("jhon22"))
+                .thenReturn(new CheckoutValidationResponse("Invalid Cart",
+                        List.of(new BookWithQuantity("123", "Book 1", 2))
+                ));
+        mockMvc.perform(get("/checkoutValidation").header("userId", "jhon22"))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.errorDetails[0].bookId").value("123"))
+                .andExpect(jsonPath("$.errorDetails[0].bookName").value("Book 1"))
+                .andExpect(jsonPath("$.errorDetails[0].availableQuantity").value(2));
     }
 }
