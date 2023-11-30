@@ -1,6 +1,8 @@
 package org.bookshop.cart;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -9,14 +11,14 @@ import java.util.Objects;
 @Table(name = "carts")
 public class CartEntity {
     @EmbeddedId
-    UserBookKey id;
+    UserBookKeyEntity id;
     Integer qty;
 
     Timestamp createdDate;
     Timestamp updatedDate;
 
     public CartEntity(
-            UserBookKey id,
+            UserBookKeyEntity id,
             Integer qty
     ) {
         this.id = id;
@@ -36,6 +38,7 @@ public class CartEntity {
                 ", qty=" + qty +
                 '}';
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

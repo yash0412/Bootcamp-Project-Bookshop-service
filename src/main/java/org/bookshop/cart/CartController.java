@@ -33,7 +33,7 @@ public class CartController {
 
         for (CartItem item : req.cartItems()) {
             cartService.createCartItem(
-                    new UserBookKey(userId, item.bookId()),
+                    new UserBookKeyEntity(userId, item.bookId()),
                     item.qty()
             );
         }

@@ -49,4 +49,8 @@ tasks.jacocoTestReport {
         csv.required = true
         html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
     }
+    classDirectories.setFrom(
+            fileTree("build/classes/java/main")
+                    .filter { file -> !file.name.contains("Entity") }
+    )
 }

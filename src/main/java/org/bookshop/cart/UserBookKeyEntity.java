@@ -5,15 +5,17 @@ import jakarta.persistence.Column;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class UserBookKey implements Serializable {
+public class UserBookKeyEntity implements Serializable {
     @Column(name = "userid")
     private String userId;
 
     @Column(name = "bookid")
     private String bookId;
 
-    public UserBookKey() {}
-    public UserBookKey(String userId , String bookId) {
+    public UserBookKeyEntity() {
+    }
+
+    public UserBookKeyEntity(String userId, String bookId) {
         this.userId = userId;
         this.bookId = bookId;
     }
@@ -29,7 +31,7 @@ public class UserBookKey implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UserBookKey that)) return false;
+        if (!(o instanceof UserBookKeyEntity that)) return false;
 
         return Objects.equals(userId, that.userId);
     }

@@ -30,7 +30,7 @@ public class CartServiceTest {
     @Test
     void shouldGetAllCartItemsFromRepository() {
         Mockito.when(repository.findCartEntitiesById_UserId("123"))
-                .thenReturn(List.of(new CartEntity(new UserBookKey("123", "123"),
+                .thenReturn(List.of(new CartEntity(new UserBookKeyEntity("123", "123"),
                         1)));
 
         CartService cartService = new CartService(repository, bookService);
@@ -43,29 +43,30 @@ public class CartServiceTest {
     @Test
     void shouldCreateCartItemIfBookExistInBooksAndNotExistInCart() {
         CartService cartService = new CartService(repository, bookService);
-        UserBookKey userBookKey = new UserBookKey("1", "1");
+        UserBookKeyEntity userBookKeyEntity = new UserBookKeyEntity("1", "1");
         Mockito.when(bookService.isBookExist("1")).
                 thenReturn(true);
-        Mockito.when(repository.existsById(userBookKey)).
+        Mockito.when(repository.existsById(userBookKeyEntity)).
                 thenReturn(false);
-        CartEntity cartEntity = new CartEntity(userBookKey, 1);
+        CartEntity cartEntity = new CartEntity(userBookKeyEntity, 1);
         cartService.createCartItem(
-                userBookKey,
+                userBookKeyEntity,
                 1
         );
         Mockito.verify(repository, Mockito.times(1)).saveAndFlush(cartEntity);
     }
+
     @Test
     void shouldNotCreateCartItemIfBookDoesntExistInBooks() {
         CartService cartService = new CartService(repository, bookService);
-        UserBookKey userBookKey = new UserBookKey("1", "1");
+        UserBookKeyEntity userBookKeyEntity = new UserBookKeyEntity("1", "1");
         Mockito.when(bookService.isBookExist("1")).
                 thenReturn(false);
-        Mockito.when(repository.existsById(userBookKey)).
+        Mockito.when(repository.existsById(userBookKeyEntity)).
                 thenReturn(false);
-        CartEntity cartEntity = new CartEntity(userBookKey, 1);
+        CartEntity cartEntity = new CartEntity(userBookKeyEntity, 1);
         cartService.createCartItem(
-                userBookKey,
+                userBookKeyEntity,
                 1
         );
         Mockito.verify(repository, Mockito.times(0)).saveAndFlush(cartEntity);
@@ -74,14 +75,14 @@ public class CartServiceTest {
     @Test
     void shouldNotCreateCartItemIfBookExistInBooksAndAlreadyExistInCart() {
         CartService cartService = new CartService(repository, bookService);
-        UserBookKey userBookKey = new UserBookKey("1", "1");
+        UserBookKeyEntity userBookKeyEntity = new UserBookKeyEntity("1", "1");
         Mockito.when(bookService.isBookExist("1")).
                 thenReturn(false);
-        Mockito.when(repository.existsById(userBookKey)).
+        Mockito.when(repository.existsById(userBookKeyEntity)).
                 thenReturn(false);
-        CartEntity cartEntity = new CartEntity(userBookKey, 1);
+        CartEntity cartEntity = new CartEntity(userBookKeyEntity, 1);
         cartService.createCartItem(
-                userBookKey,
+                userBookKeyEntity,
                 1
         );
         Mockito.verify(repository, Mockito.times(0)).saveAndFlush(cartEntity);
@@ -90,10 +91,10 @@ public class CartServiceTest {
     @Test
     void shouldUpdateCartItem() {
         CartService cartService = new CartService(repository, bookService);
-        UserBookKey userBookKey = new UserBookKey("1", "123");
-        CartEntity cartEntity = new CartEntity(userBookKey,
+        UserBookKeyEntity userBookKeyEntity = new UserBookKeyEntity("1", "123");
+        CartEntity cartEntity = new CartEntity(userBookKeyEntity,
                 100);
-        Mockito.when(repository.findCartEntityById(userBookKey)).
+        Mockito.when(repository.findCartEntityById(userBookKeyEntity)).
                 thenReturn(cartEntity);
         cartService.updateCartItem(
                 "123",
@@ -107,12 +108,12 @@ public class CartServiceTest {
     void shouldDeleteCartItemSuccessfully() {
         CartRepository repository = Mockito.mock(CartRepository.class);
         CartService cartService = new CartService(repository, bookService);
-        UserBookKey userBookKey = new UserBookKey("1", "123");
+        UserBookKeyEntity userBookKeyEntity = new UserBookKeyEntity("1", "123");
         cartService.deleteCartItem(
                 "1",
                 "123"
         );
-        Mockito.verify(repository, Mockito.times(1)).deleteById(userBookKey);
+        Mockito.verify(repository, Mockito.times(1)).deleteById(userBookKeyEntity);
     }
 
     @Test
@@ -125,7 +126,7 @@ public class CartServiceTest {
                 "1980",
                 120.00, 4, "imageUrl", "shortURL", 4.5);
         Mockito.when(repository.findCartEntitiesById_UserId("userId")).thenReturn(List.of(
-                new CartEntity(new UserBookKey("userId", "123"), 3)
+                new CartEntity(new UserBookKeyEntity("userId", "123"), 3)
         ));
         Mockito.when(bookService.getBooks(List.of("123")))
                 .thenReturn(List.of(book));
@@ -145,7 +146,7 @@ public class CartServiceTest {
                 "1980",
                 120.00, 2, "imageUrl", "shortURL", 4.5);
         Mockito.when(repository.findCartEntitiesById_UserId("userId")).thenReturn(List.of(
-                new CartEntity(new UserBookKey("userId", "123"), 3)
+                new CartEntity(new UserBookKeyEntity("userId", "123"), 3)
         ));
         Mockito.when(bookService.getBooks(List.of("123")))
                 .thenReturn(List.of(book));

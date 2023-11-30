@@ -3,13 +3,12 @@ package org.bookshop.cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface CartRepository extends JpaRepository<CartEntity,  UserBookKey>{
-    CartEntity findCartEntityById(UserBookKey userBookId);
+public interface CartRepository extends JpaRepository<CartEntity, UserBookKeyEntity> {
+    CartEntity findCartEntityById(UserBookKeyEntity userBookId);
 
     List<CartEntity> findCartEntitiesById_UserId(String userid);
 
-    boolean existsById(UserBookKey id);
+    boolean existsById(UserBookKeyEntity id);
 
 }
