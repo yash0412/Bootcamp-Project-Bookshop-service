@@ -1,4 +1,4 @@
 package org.bookshop.cart;
 
-public record BookWithQuantity(String bookId, String bookName, Integer availableQuantity) {
+public record BookWithQuantity(String id, String title, Integer availableQuantity) {
 }

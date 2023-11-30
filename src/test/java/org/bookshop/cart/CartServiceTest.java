@@ -1,6 +1,7 @@
 package org.bookshop.cart;
 
 import org.assertj.core.api.Assertions;
+import org.bookshop.book.Book;
 import org.bookshop.book.BookService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -82,23 +83,45 @@ public class CartServiceTest {
         Mockito.verify(repository, Mockito.times(1)).deleteById(userBookKey);
     }
 
-//    @Test
-//    void shouldGetItemsFromCartAndGetBookDetailsUsingBookIdsAndReturnNoError() {
-//        Book book = new Book("123",
-//                "ISBN",
-//                "Think And Grow Rich",
-//                "Description",
-//                "Nepolean Hill",
-//                "1980",
-//                120.00, 2, "imageUrl", "shortURL", 4.5);
-//        Mockito.when(repository.findCartEntitiesById_UserId("userId")).thenReturn(List.of(
-//                new CartEntity(new UserBookKey("userId", "123"), 3)
-//        ));
-//        Mockito.when(bookService.getBooks(List.of("123")))
-//                .thenReturn(List.of(book));
-//
-//        CartService cartService = new CartService(repository, bookService);
-//        CheckoutValidationResponse response = cartService.validateCheckout("userId");
-//        Assertions.assertThat(response.error()).isEqualTo("");
-//    }
+    @Test
+    void shouldGetItemsFromCartAndGetBookDetailsUsingBookIdsAndReturnNoError() {
+        Book book = new Book("123",
+                "ISBN",
+                "Think And Grow Rich",
+                "Description",
+                "Nepolean Hill",
+                "1980",
+                120.00, 4, "imageUrl", "shortURL", 4.5);
+        Mockito.when(repository.findCartEntitiesById_UserId("userId")).thenReturn(List.of(
+                new CartEntity(new UserBookKey("userId", "123"), 3)
+        ));
+        Mockito.when(bookService.getBooks(List.of("123")))
+                .thenReturn(List.of(book));
+
+        CartService cartService = new CartService(repository, bookService);
+        CheckoutValidationResponse response = cartService.validateCheckout("userId");
+        Assertions.assertThat(response.error()).isEqualTo("");
+    }
+
+    @Test
+    void shouldGetItemsFromCartAndGetBookDetailsUsingBookIdsAndReturnInvalidCartErrorWhenStockIsInSufficient() {
+        Book book = new Book("123",
+                "ISBN",
+                "Think And Grow Rich",
+                "Description",
+                "Nepolean Hill",
+                "1980",
+                120.00, 2, "imageUrl", "shortURL", 4.5);
+        Mockito.when(repository.findCartEntitiesById_UserId("userId")).thenReturn(List.of(
+                new CartEntity(new UserBookKey("userId", "123"), 3)
+        ));
+        Mockito.when(bookService.getBooks(List.of("123")))
+                .thenReturn(List.of(book));
+
+        CartService cartService = new CartService(repository, bookService);
+        CheckoutValidationResponse response = cartService.validateCheckout("userId");
+        Assertions.assertThat(response.error()).isEqualTo("Invalid Cart");
+        Assertions.assertThat(response.errorDetails().size()).isEqualTo(1);
+        Assertions.assertThat(response.errorDetails().get(0)).isEqualTo(new BookWithQuantity("123", "Think And Grow Rich", 2));
+    }
 }
