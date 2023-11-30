@@ -51,4 +51,7 @@ public class BookEntity {
     public BookEntity() {
     }
 
+    public String getIsbn() {
+        return isbn;
+    }
 }

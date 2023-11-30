@@ -28,9 +28,9 @@ public class BooksFileValidationService implements BooksFileValidation {
                 .withCSVParser(csvParser)
                 .build()) {
             List<String[]> allData = csvReader.readAll();
-            for (int index = 0; index < allData.size(); index++) {
-                String[] rowData = allData.get(index);
-
+            System.out.println("Read file, read line: " + allData.size());
+            int index = 0;
+            for (String[] rowData : allData) {
                 if (rowData.length != 10) {
                     throw new BadFileException("File Data not valid at row " + (index + 1));
                 }
@@ -49,6 +49,7 @@ public class BooksFileValidationService implements BooksFileValidation {
                             Math.round(Double.parseDouble(rowData[9]) * 100) / 100D
                     );
                     books.add(book);
+                    index++;
                 } catch (Exception e) {
                     System.out.println(e);
                     throw new BadFileException("File Data not valid at row " + (index + 1));
@@ -59,6 +60,7 @@ public class BooksFileValidationService implements BooksFileValidation {
         } catch (BadFileException e) {
             throw e;
         }
+        System.out.println("Read all Data");
         return getUniqueBooks(books);
     }
 

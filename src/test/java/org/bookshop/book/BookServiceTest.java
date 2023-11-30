@@ -1,10 +1,6 @@
 package org.bookshop.book;
 
 import org.assertj.core.api.Assertions;
-import org.bookshop.book.Book;
-import org.bookshop.book.BookEntity;
-import org.bookshop.book.BookRepository;
-import org.bookshop.book.BookService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -14,6 +10,21 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
+class mockISBnOnly implements IsbnOnly {
+
+    private final String isbn;
+
+    mockISBnOnly(String isbn) {
+        this.isbn = isbn;
+    }
+
+    @Override
+    public String getIsbn() {
+        return isbn;
+    }
+}
 
 @ExtendWith(MockitoExtension.class)
 public class BookServiceTest {
@@ -95,8 +106,10 @@ public class BookServiceTest {
                 "Nepolean Hill",
                 "1980",
                 120.00, 50, "imageUrl", "shortURL", 4.5));
-        Mockito.when(bookRepository.save(Mockito.any()))
-                .thenReturn(new BookEntity());
+        Mockito.when(bookRepository.findBookEntitiesByIsbnIn(Mockito.any()))
+                .thenReturn(List.of());
+        Mockito.when(bookRepository.saveAll(Mockito.any()))
+                .thenReturn(List.of());
         BookService bookService = new BookService(bookRepository);
         int saveCount = bookService.loadBooks(books);
         Assertions.assertThat(saveCount).isEqualTo(3);
@@ -106,61 +119,97 @@ public class BookServiceTest {
     @Test
     void shouldLoadOtherBooksExceptOnesWithDuplicateISBN() {
         List<Book> books = List.of(new Book("someid",
-                        "ISBN",
+                        "ISBN1",
                         "Think And Grow Rich",
                         "Description",
                         "Nepolean Hill",
                         "1980",
                         120.00, 50, "imageUrl", "shortURL", 4.5),
-                new Book("someid",
-                        "ISBN",
+                new Book("someid1",
+                        "ISBN2",
                         "Think And Grow Rich",
                         "Description",
                         "Nepolean Hill",
                         "1980",
                         120.00, 50, "imageUrl", "shortURL", 4.5),
-                new Book("someid",
-                        "ISBN",
+                new Book("someid2",
+                        "ISBN3",
                         "Think And Grow Rich",
                         "Description",
                         "Nepolean Hill",
                         "1980",
                         120.00, 50, "imageUrl", "shortURL", 4.5));
-        Mockito.when(bookRepository.save(Mockito.any()))
-                .thenThrow(new DataIntegrityViolationException("error"));
+
+        Mockito.when(bookRepository.findBookEntitiesByIsbnIn(Mockito.any()))
+                .thenReturn(List.of(new mockISBnOnly("ISBN2")));
+        Mockito.when(bookRepository.saveAll(Mockito.any()))
+                .thenReturn(List.of());
+        BookService bookService = new BookService(bookRepository);
+        int saveCount = bookService.loadBooks(books);
+        Assertions.assertThat(saveCount).isEqualTo(2);
+    }
+
+    @Test
+    void shouldNotLoadAnyBooksWhenNoNewBooksAreProvided() {
+        List<Book> books = List.of(new Book("someid",
+                        "ISBN1",
+                        "Think And Grow Rich",
+                        "Description",
+                        "Nepolean Hill",
+                        "1980",
+                        120.00, 50, "imageUrl", "shortURL", 4.5),
+                new Book("someid1",
+                        "ISBN2",
+                        "Think And Grow Rich",
+                        "Description",
+                        "Nepolean Hill",
+                        "1980",
+                        120.00, 50, "imageUrl", "shortURL", 4.5),
+                new Book("someid2",
+                        "ISBN3",
+                        "Think And Grow Rich",
+                        "Description",
+                        "Nepolean Hill",
+                        "1980",
+                        120.00, 50, "imageUrl", "shortURL", 4.5));
+
+        Mockito.when(bookRepository.findBookEntitiesByIsbnIn(Mockito.any()))
+                .thenReturn(List.of(new mockISBnOnly("ISBN1"), new mockISBnOnly("ISBN2"), new mockISBnOnly("ISBN3")));
         BookService bookService = new BookService(bookRepository);
         int saveCount = bookService.loadBooks(books);
         Assertions.assertThat(saveCount).isEqualTo(0);
     }
 
     @Test
-    void shouldThrowExceptionWhenOtherExceptionOccursWhileLoadingTheBooks() {
+    void shouldThrowExceptionWhenExceptionOccursWhileSavingBooks() {
         List<Book> books = List.of(new Book("someid",
-                        "ISBN",
+                        "ISBN1",
                         "Think And Grow Rich",
                         "Description",
                         "Nepolean Hill",
                         "1980",
                         120.00, 50, "imageUrl", "shortURL", 4.5),
-                new Book("someid",
-                        "ISBN",
+                new Book("someid1",
+                        "ISBN2",
                         "Think And Grow Rich",
                         "Description",
                         "Nepolean Hill",
                         "1980",
                         120.00, 50, "imageUrl", "shortURL", 4.5),
-                new Book("someid",
-                        "ISBN",
+                new Book("someid2",
+                        "ISBN3",
                         "Think And Grow Rich",
                         "Description",
                         "Nepolean Hill",
                         "1980",
                         120.00, 50, "imageUrl", "shortURL", 4.5));
-        Mockito.when(bookRepository.save(Mockito.any()))
-                .thenThrow(new RuntimeException("error"));
+
+        Mockito.when(bookRepository.findBookEntitiesByIsbnIn(Mockito.any()))
+                .thenReturn(List.of());
+        Mockito.when(bookRepository.saveAll(Mockito.any()))
+                .thenThrow(new DataIntegrityViolationException("error"));
         BookService bookService = new BookService(bookRepository);
-        Assertions.assertThatThrownBy(() -> {
-            bookService.loadBooks(books);
-        }).isInstanceOf(RuntimeException.class);
+        Assertions.assertThatThrownBy(() -> bookService.loadBooks(books)).isInstanceOf(DataIntegrityViolationException.class);
     }
+
 }

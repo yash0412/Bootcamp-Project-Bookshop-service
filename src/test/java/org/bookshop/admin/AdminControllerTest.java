@@ -1,6 +1,5 @@
 package org.bookshop.admin;
 
-import org.assertj.core.api.Assertions;
 import org.bookshop.book.Book;
 import org.bookshop.book.BookService;
 import org.bookshop.book.BooksFileValidation;
@@ -69,7 +68,6 @@ public class AdminControllerTest {
                         "1980",
                         120.00, 50, "imageUrl", "shortImage", 4.5)));
         mockMvc.perform(multipart("/admin/loadBooksRequest").file(csvFile)).andExpect(status().isOk());
-        Assertions.assertThat(true);
     }
 }
 
