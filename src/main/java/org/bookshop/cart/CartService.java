@@ -22,7 +22,7 @@ public class CartService {
     }
 
     public List<CartDetails> getCartItems(String userId) {
-        UserBookKeyEntity userBookId = new UserBookKeyEntity(userId, null);
+        UserBookKey userBookId = new UserBookKey(userId, null);
         List<Item> list = cartRepository.findCartEntitiesById_UserId(userId)
                 .stream()
                 .map(cartEntity -> new Item(cartEntity.id.getBookId(), cartEntity.qty))
@@ -37,7 +37,7 @@ public class CartService {
         return cartList;
     }
 
-    public void createCartItem(UserBookKeyEntity id, Integer qty) {
+    public void createCartItem(UserBookKey id, Integer qty) {
         boolean bookExist = bookService.isBookExist(id.getBookId());
         boolean bookExistInCart = cartRepository.existsById(id);
         if (bookExist && !bookExistInCart) {
@@ -51,7 +51,7 @@ public class CartService {
     }
 
     public void updateCartItem(String bookId, String userId, Integer qty) {
-        UserBookKeyEntity userBookId = new UserBookKeyEntity(userId, bookId);
+        UserBookKey userBookId = new UserBookKey(userId, bookId);
         CartEntity cartEntity = cartRepository.findCartEntityById(userBookId);
         cartEntity.qty = qty;
         cartRepository.saveAndFlush(
@@ -61,7 +61,7 @@ public class CartService {
 
 
     public void deleteCartItem(String userId, String bookId) {
-        UserBookKeyEntity userBookId = new UserBookKeyEntity(userId, bookId);
+        UserBookKey userBookId = new UserBookKey(userId, bookId);
         cartRepository.deleteById(userBookId);
     }
 

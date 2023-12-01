@@ -11,14 +11,14 @@ import java.util.Objects;
 @Table(name = "carts")
 public class CartEntity {
     @EmbeddedId
-    UserBookKeyEntity id;
+    UserBookKey id;
     Integer qty;
 
     Timestamp createdDate;
     Timestamp updatedDate;
 
     public CartEntity(
-            UserBookKeyEntity id,
+            UserBookKey id,
             Integer qty
     ) {
         this.id = id;

@@ -22,7 +22,7 @@ public class OrderController {
 
     @PostMapping("order-confirmation")
     public ResponseEntity<?> createCartItems(
-            @RequestBody OrderConfirmationRequest req,
+            @RequestBody(required = true) OrderConfirmationRequest req,
             @RequestHeader(value = "userId", required = true) String userId
     ) {
         CheckoutValidationResponse checkoutValidationResponse = cartService.validateCheckout(userId);
