@@ -212,4 +212,22 @@ public class BookServiceTest {
         Assertions.assertThatThrownBy(() -> bookService.loadBooks(books)).isInstanceOf(DataIntegrityViolationException.class);
     }
 
+    @Test
+    void shouldReturnBookById() {
+        BookEntity bookEntity = new BookEntity("someid",
+                "ISBN1",
+                "Think And Grow Rich",
+                "Description",
+                "Nepolean Hill",
+                "1980",
+                120.00, 50, "imageUrl", "shortURL", 4.5);
+        Mockito.when(bookRepository.findBookEntityById(Mockito.any()))
+                .thenReturn(bookEntity);
+        BookService bookService = new BookService(bookRepository);
+        Book book = bookService.getBookById("someid");
+        Assertions.assertThat(bookEntity.id).isEqualTo(book.id());
+        Assertions.assertThat(bookEntity.isbn).isEqualTo(book.isbn());
+        Assertions.assertThat(bookEntity.title).isEqualTo(book.title());
+    }
+
 }
