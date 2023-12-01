@@ -19,11 +19,6 @@ public class UserBookKey implements Serializable {
         this.userId = userId;
         this.bookId = bookId;
     }
-
-    public String getUserId() {
-        return this.userId;
-    }
-
     public String getBookId() {
         return this.bookId;
     }
