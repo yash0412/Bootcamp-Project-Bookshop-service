@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
@@ -24,6 +25,7 @@ public class OrderServiceTest {
     OrderRepository orderRepository;
 
     private final String userId = "jhon11";
+    private final String orderId = "OD123";
 
     @BeforeEach
     void setUp() {
@@ -100,5 +102,20 @@ public class OrderServiceTest {
         OrderService orderService = new OrderService(cartService, orderItemRepository, orderRepository);
         Assertions.assertThatThrownBy(() -> orderService.createOrder(userId, deliveryAddress, PaymentType.COD, "123"))
                 .isInstanceOf(OrderCreationFailedException.class).hasMessage("Failed to create order");
+    }
+
+    @Test
+    void shouldThrowOrderNotFoundExceptionWhenOrderIsNotPresentInDBForConfirm() {
+        Mockito.when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
+        OrderService orderService = new OrderService(cartService, orderItemRepository, orderRepository);
+        Assertions.assertThatThrownBy(() -> orderService.confirmOrder(orderId, "123", OrderStatus.Completed))
+                .isInstanceOf(OrderNotFoundException.class).hasMessage("Order id not found");
+    }
+
+    @Test
+    void shouldConfirmOrderAndUpdateStatus() throws Exception {
+        Mockito.when(orderRepository.findById(orderId)).thenReturn(Optional.of(new OrderEntity()));
+        OrderService orderService = new OrderService(cartService, orderItemRepository, orderRepository);
+        orderService.confirmOrder(orderId, "123", OrderStatus.Completed);
     }
 }
