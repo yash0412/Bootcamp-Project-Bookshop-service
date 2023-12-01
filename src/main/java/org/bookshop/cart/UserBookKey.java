@@ -12,9 +12,6 @@ public class UserBookKey implements Serializable {
     @Column(name = "bookid")
     private String bookId;
 
-    public UserBookKey() {
-    }
-
     public UserBookKey(String userId, String bookId) {
         this.userId = userId;
         this.bookId = bookId;
