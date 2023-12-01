@@ -73,13 +73,29 @@ public class CartServiceTest {
     }
 
     @Test
-    void shouldNotCreateCartItemIfBookExistInBooksAndAlreadyExistInCart() {
+    void shouldNotCreateCartItemIfBookDoesntExistInBooksAndAlreadyExistInCart() {
         CartService cartService = new CartService(repository, bookService);
         UserBookKey userBookKey = new UserBookKey("1", "1");
         Mockito.when(bookService.isBookExist("1")).
                 thenReturn(false);
         Mockito.when(repository.existsById(userBookKey)).
-                thenReturn(false);
+                thenReturn(true);
+        CartEntity cartEntity = new CartEntity(userBookKey, 1);
+        cartService.createCartItem(
+                userBookKey,
+                1
+        );
+        Mockito.verify(repository, Mockito.times(0)).saveAndFlush(cartEntity);
+    }
+
+    @Test
+    void shouldNotCreateCartItemIfBookExistInBooksAndNotExistInCart() {
+        CartService cartService = new CartService(repository, bookService);
+        UserBookKey userBookKey = new UserBookKey("1", "1");
+        Mockito.when(bookService.isBookExist("1")).
+                thenReturn(true);
+        Mockito.when(repository.existsById(userBookKey)).
+                thenReturn(true);
         CartEntity cartEntity = new CartEntity(userBookKey, 1);
         cartService.createCartItem(
                 userBookKey,
