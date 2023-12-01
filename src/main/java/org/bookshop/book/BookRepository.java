@@ -13,7 +13,7 @@ public interface BookRepository extends JpaRepository<BookEntity, String> {
 
     List<IsbnOnly> findBookEntitiesByIsbnIn(List<String> isbn);
 
-    @Query(nativeQuery = true,value = "SELECT * FROM books  WHERE title LIKE CONCAT('%',:query, '%') Or author LIKE CONCAT('%', :query, '%') LIMIT 2")
+    @Query(nativeQuery = true,value = "SELECT * FROM books  WHERE title LIKE CONCAT('%',:query, '%') Or author LIKE CONCAT('%', :query, '%') LIMIT 50")
     List<BookEntity> search(String query);
 
     BookEntity findBookEntityById(String id);

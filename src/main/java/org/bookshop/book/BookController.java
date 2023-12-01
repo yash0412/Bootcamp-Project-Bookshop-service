@@ -25,7 +25,7 @@ public class BookController {
             return ResponseEntity.ok(new Books(allBooks));
         }
         if (query.length() <3){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "More Than Three Characters Need for Search");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Enter Valid Request");
         }
         List<Book> searchedBook =bookService.searchBook(query);
         return ResponseEntity.ok(new Books(searchedBook));
