@@ -27,9 +27,4 @@ public class UserBookKey implements Serializable {
 
         return Objects.equals(userId, that.userId);
     }
-
-    @Override
-    public int hashCode() {
-        return userId != null ? userId.hashCode() : 0;
-    }
 }
