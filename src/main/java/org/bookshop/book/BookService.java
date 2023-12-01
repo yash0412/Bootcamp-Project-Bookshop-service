@@ -109,6 +109,24 @@ public class BookService {
         return newBooks;
     }
 
+    public List<Book> searchBook(String query) {
+            return bookRepository.search(query)
+                    .stream()
+                    .map(bookEntity -> new Book(bookEntity.id,
+                            bookEntity.isbn,
+                            bookEntity.title,
+                            bookEntity.description,
+                            bookEntity.author,
+                            bookEntity.publicationYear,
+                            bookEntity.price,
+                            bookEntity.quantity,
+                            bookEntity.imageUrl,
+                            bookEntity.shortImageUrl,
+                            bookEntity.averageRating))
+                    .toList();
+
+    }
+
     public Book getBookById(String bookId) {
         BookEntity bookEntity = bookRepository.findBookEntityById(bookId);
         return new Book(

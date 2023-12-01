@@ -213,6 +213,30 @@ public class BookServiceTest {
     }
 
     @Test
+    void shouldGetAllSearchedBooksFromRepository() {
+        Mockito.when(bookRepository.search("Thi"))
+                .thenReturn(List.of(new BookEntity("someid",
+                        "ISBN",
+                        "Think And Grow Rich",
+                        "Description",
+                        "Nepolean Hill",
+                        "1980",
+                        120.00, 50, "imageUrl", "shortURL", 4.5)));
+
+        BookService bookService = new BookService(bookRepository);
+
+        List<Book> expectedBooks = List.of(new Book("someid",
+                "ISBN",
+                "Think And Grow Rich",
+                "Description",
+                "Nepolean Hill",
+                "1980",
+                120.00, 50, "imageUrl", "shortURL", 4.5));
+        List<Book> allBooks = bookService.searchBook("Thi");
+
+        Assertions.assertThat(allBooks).containsAll(expectedBooks);
+    }
+    @Test
     void shouldReturnBookById() {
         BookEntity bookEntity = new BookEntity("someid",
                 "ISBN1",

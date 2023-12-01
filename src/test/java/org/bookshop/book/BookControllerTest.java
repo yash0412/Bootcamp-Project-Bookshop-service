@@ -60,7 +60,6 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.books[0].quantity").value(50))
                 .andExpect(jsonPath("$.books[0].imageUrl").value("imageUrl"));
 
-
     }
 
     @Test
@@ -71,13 +70,9 @@ public class BookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.books").isEmpty());
     }
-
     @Test
-    void getBooksShouldReturnBooks() throws Exception {
-        List<String> bookList = new ArrayList<>();
-        bookList.add("b0ca96a9-d5d6-4f8b-8353-8d81e2222747");
-        bookList.add("30faf58b-fd4e-46aa-aa18-964e95a4f56b");
-        Mockito.when(bookService.getBooks(bookList))
+    void shouldReturnSearchedBook() throws Exception {
+        Mockito.when(bookService.searchBook("Think"))
                 .thenReturn(List.of(new Book("abcd",
                         "ISBN",
                         "Think And Grow Rich",
@@ -86,51 +81,30 @@ public class BookControllerTest {
                         "1980",
                         120.00, 50, "imageUrl", "shortImage", 4.5)));
 
-        ListBookRequest request = new ListBookRequest(bookList);
-
-        mockMvc.perform(post("/books/serach-request")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+        mockMvc.perform(get("/books?query=Think"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.books").isArray());
+                .andExpect(jsonPath("$.books[0].title").value("Think And Grow Rich"))
+                .andExpect(jsonPath("$.books[0].id").value("abcd"))
+                .andExpect(jsonPath("$.books[0].author").value("Nepolean Hill"))
+                .andExpect(jsonPath("$.books[0].quantity").value(50))
+                .andExpect(jsonPath("$.books[0].imageUrl").value("imageUrl"));
+
     }
 
     @Test
-    void getBooksShouldReturnBooksOnId() throws Exception {
-        List<String> bookList = new ArrayList<>();
-        bookList.add("b0ca96a9-d5d6-4f8b-8353-8d81e2222747");
-        bookList.add("30faf58b-fd4e-46aa-aa18-964e95a4f56b");
-        Mockito.when(bookService.getBooks(bookList))
-                .thenReturn(List.of(new Book("b0ca96a9-d5d6-4f8b-8353-8d81e2222747",
+    void shouldReturnError() throws Exception {
+        Mockito.when(bookService.searchBook("Th"))
+                .thenReturn(List.of(new Book("abcd",
                         "ISBN",
                         "Think And Grow Rich",
                         "Description",
                         "Nepolean Hill",
                         "1980",
-                        120.00, 50, "imageUrl", "shortImage", 4.5), new Book("30faf58b-fd4e-46aa-aa18-964e95a4f56b",
-                        "ISBN",
-                        "Alchamist",
-                        "Description",
-                        "Paulo Coelho",
-                        "1980",
-                        520.00, 5, "imageUrl", "shortImage", 4.5)));
+                        120.00, 50, "imageUrl", "shortImage", 4.5)));
 
-        ListBookRequest request = new ListBookRequest(bookList);
+        mockMvc.perform(get("/books?query=Th"))
+                .andExpect(status().isBadRequest());
 
-        mockMvc.perform(post("/books/serach-request")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.books[0].id").value("b0ca96a9-d5d6-4f8b-8353-8d81e2222747"))
-                .andExpect(jsonPath("$.books[0].title").value("Think And Grow Rich"))
-                .andExpect(jsonPath("$.books[0].author").value("Nepolean Hill"))
-                .andExpect(jsonPath("$.books[0].price").value(120.0))
-                .andExpect(jsonPath("$.books[0].quantity").value(50))
-                .andExpect(jsonPath("$.books[1].id").value("30faf58b-fd4e-46aa-aa18-964e95a4f56b"))
-                .andExpect(jsonPath("$.books[1].title").value("Alchamist"))
-                .andExpect(jsonPath("$.books[1].author").value("Paulo Coelho"))
-                .andExpect(jsonPath("$.books[1].price").value(520.00))
-                .andExpect(jsonPath("$.books[1].quantity").value(5));
     }
 
 
