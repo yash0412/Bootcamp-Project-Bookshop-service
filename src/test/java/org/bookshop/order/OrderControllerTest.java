@@ -28,6 +28,33 @@ public class OrderControllerTest {
 
 
     @Test
+    void shouldReturnBadRequestIfDeliveryAddressIsNull() throws Exception {
+
+        OrderConfirmationRequest orderConfirmationRequest = new OrderConfirmationRequest(null, PaymentType.COD);
+
+
+        mockMvc.perform(post("/order-confirmation").header("userId", "jhon22")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderConfirmationRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequestIfPaymentTypeIsNull() throws Exception {
+        DeliveryAddress deliveryAddress = new DeliveryAddress(
+                "Kormangala, Bangalore", "Karnataka",
+                "560110", Country.India, "9199002233", "8999299992");
+        OrderConfirmationRequest orderConfirmationRequest = new OrderConfirmationRequest(deliveryAddress, null);
+
+        Mockito.when(orderService.createOrder("jhon22", deliveryAddress, PaymentType.COD, ""))
+                .thenThrow(new InvalidCartException("Items out of stock"));
+        mockMvc.perform(post("/order-confirmation").header("userId", "jhon22")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderConfirmationRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void shouldReturnSuccessOnSuccessfulOrder() throws Exception {
         DeliveryAddress deliveryAddress = new DeliveryAddress(
                 "Kormangala, Bangalore", "Karnataka",
@@ -35,7 +62,7 @@ public class OrderControllerTest {
         OrderConfirmationRequest orderConfirmationRequest = new OrderConfirmationRequest(deliveryAddress, PaymentType.COD);
         Mockito.when(orderService.createOrder("jhon22", deliveryAddress, PaymentType.COD, ""))
                 .thenReturn("OD1234");
-
+        
         mockMvc.perform(post("/order-confirmation").header("userId", "jhon22")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(orderConfirmationRequest)))

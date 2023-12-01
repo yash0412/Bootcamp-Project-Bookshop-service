@@ -24,10 +24,12 @@ public class OrderController {
             return ResponseEntity.badRequest()
                     .body("Invalid Request, required params are missing");
         }
+
         String orderId = orderService.createOrder(userId, req.deliveryAddress(), req.paymentType(), "");
         if (req.paymentType() == PaymentType.COD) {
             orderService.confirmOrder(orderId, "NA", OrderStatus.Completed);
         }
+
         URI location = URI.create("localhost:8080");
         return ResponseEntity.created(location)
                 .header("orderId", orderId).build();
