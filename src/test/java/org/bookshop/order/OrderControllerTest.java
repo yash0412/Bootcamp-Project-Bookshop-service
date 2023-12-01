@@ -1,9 +1,6 @@
 package org.bookshop.order;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.bookshop.cart.BookWithQuantity;
-import org.bookshop.cart.CartService;
-import org.bookshop.cart.CheckoutValidationResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -31,8 +26,6 @@ public class OrderControllerTest {
     @MockBean
     OrderService orderService;
 
-    @MockBean
-    CartService cartService;
 
     @Test
     void shouldReturnSuccessOnSuccessfulOrder() throws Exception {
@@ -40,8 +33,8 @@ public class OrderControllerTest {
                 "Kormangala, Bangalore", "Karnataka",
                 "560110", Country.India, "9199002233", "8999299992");
         OrderConfirmationRequest orderConfirmationRequest = new OrderConfirmationRequest(deliveryAddress, PaymentType.COD);
-        Mockito.when(cartService.validateCheckout("jhon22"))
-                .thenReturn(new CheckoutValidationResponse("", List.of()));
+        Mockito.when(orderService.createOrder("jhon22", deliveryAddress, PaymentType.COD, ""))
+                .thenReturn("OD1234");
 
         mockMvc.perform(post("/order-confirmation").header("userId", "jhon22")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -56,11 +49,8 @@ public class OrderControllerTest {
                 "560110", Country.India, "9199002233", "8999299992");
         OrderConfirmationRequest orderConfirmationRequest = new OrderConfirmationRequest(deliveryAddress, PaymentType.COD);
 
-        Mockito.when(cartService.validateCheckout("jhon22"))
-                .thenReturn(new CheckoutValidationResponse("Invalid Cart",
-                        List.of(new BookWithQuantity("123", "Book 1", 2))
-                ));
-
+        Mockito.when(orderService.createOrder("jhon22", deliveryAddress, PaymentType.COD, ""))
+                .thenThrow(new InvalidCartException("Items out of stock"));
         mockMvc.perform(post("/order-confirmation").header("userId", "jhon22")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(orderConfirmationRequest)))

@@ -114,7 +114,7 @@ public class CartControllerTest {
     void shouldValidateCheckoutRequestSuccess() throws Exception {
         Mockito.when(cartService.validateCheckout("jhon22"))
                 .thenReturn(new CheckoutValidationResponse("", List.of()));
-        mockMvc.perform(get("/checkoutValidation").header("userId", "jhon22"))
+        mockMvc.perform(get("/checkout-validation").header("userId", "jhon22"))
                 .andExpect(status().isOk());
     }
 
@@ -122,7 +122,7 @@ public class CartControllerTest {
     void shouldValidateCheckoutRequestReturnUnprocessableEntity() throws Exception {
         Mockito.when(cartService.validateCheckout("jhon22"))
                 .thenReturn(new CheckoutValidationResponse("Invalid Cart", List.of()));
-        mockMvc.perform(get("/checkoutValidation").header("userId", "jhon22"))
+        mockMvc.perform(get("/checkout-validation").header("userId", "jhon22"))
                 .andExpect(status().isUnprocessableEntity()).andExpect(jsonPath("$.error")
                         .value("Invalid Cart"));
     }
@@ -133,7 +133,7 @@ public class CartControllerTest {
                 .thenReturn(new CheckoutValidationResponse("Invalid Cart",
                         List.of(new BookWithQuantity("123", "Book 1", 2))
                 ));
-        mockMvc.perform(get("/checkoutValidation").header("userId", "jhon22"))
+        mockMvc.perform(get("/checkout-validation").header("userId", "jhon22"))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.errorDetails[0].id").value("123"))
                 .andExpect(jsonPath("$.errorDetails[0].title").value("Book 1"))

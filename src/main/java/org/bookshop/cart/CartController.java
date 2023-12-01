@@ -70,7 +70,7 @@ public class CartController {
         return ResponseEntity.ok("Deleted Successfully");
     }
 
-    @GetMapping("checkoutValidation")
+    @GetMapping("checkout-validation")
     public ResponseEntity<?> checkoutValidation(
             @RequestHeader(value = "userId", required = true) String userId
     ) {
