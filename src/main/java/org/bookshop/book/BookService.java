@@ -110,20 +110,20 @@ public class BookService {
     }
 
     public List<Book> searchBook(String query) {
-            return bookRepository.search(query)
-                    .stream()
-                    .map(bookEntity -> new Book(bookEntity.id,
-                            bookEntity.isbn,
-                            bookEntity.title,
-                            bookEntity.description,
-                            bookEntity.author,
-                            bookEntity.publicationYear,
-                            bookEntity.price,
-                            bookEntity.quantity,
-                            bookEntity.imageUrl,
-                            bookEntity.shortImageUrl,
-                            bookEntity.averageRating))
-                    .toList();
+        return bookRepository.search(query)
+                .stream()
+                .map(bookEntity -> new Book(bookEntity.id,
+                        bookEntity.isbn,
+                        bookEntity.title,
+                        bookEntity.description,
+                        bookEntity.author,
+                        bookEntity.publicationYear,
+                        bookEntity.price,
+                        bookEntity.quantity,
+                        bookEntity.imageUrl,
+                        bookEntity.shortImageUrl,
+                        bookEntity.averageRating))
+                .toList();
 
     }
 
@@ -146,5 +146,14 @@ public class BookService {
 
     public boolean isBookExist(String bookId) {
         return bookRepository.existsById(bookId);
+    }
+
+    public void reduceBookQuantityBy(String bookid, Integer count) {
+        BookEntity book = this.bookRepository.findBookEntityById(bookid);
+        book.quantity -= count;
+        if (book.quantity < 0) book.quantity = 0;
+        bookRepository.saveAndFlush(
+                book
+        );
     }
 }

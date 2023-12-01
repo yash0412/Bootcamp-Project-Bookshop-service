@@ -1,5 +1,6 @@
 package org.bookshop.order;
 
+import org.bookshop.book.BookService;
 import org.bookshop.cart.CartDetails;
 import org.bookshop.cart.CartService;
 import org.bookshop.cart.CheckoutValidationResponse;
@@ -13,11 +14,16 @@ public class OrderService {
     private final CartService cartService;
     private final OrderItemRepository orderItemRepository;
     private final OrderRepository orderRepository;
+    private final BookService bookService;
 
-    OrderService(CartService cartService, OrderItemRepository orderItemRepository, OrderRepository orderRepository) {
+    public OrderService(CartService cartService,
+                        OrderItemRepository orderItemRepository,
+                        OrderRepository orderRepository,
+                        BookService bookService) {
         this.cartService = cartService;
         this.orderItemRepository = orderItemRepository;
         this.orderRepository = orderRepository;
+        this.bookService = bookService;
     }
 
     public String createOrder(String userId, DeliveryAddress deliveryAddress, PaymentType paymentType, String paymentId)
@@ -55,8 +61,20 @@ public class OrderService {
             orderEntity.setPaymentId(paymentId);
             orderEntity.setStatus(status);
             orderRepository.save(orderEntity);
+
+            updateBookStockCount(orderEntity);
         } else {
             throw new OrderNotFoundException("Order id not found");
+        }
+    }
+
+    private void updateBookStockCount(OrderEntity order) {
+        List<OrderItemEntity> orderItems =
+                orderItemRepository.findOrderItemEntitiesById_Orderid(order.id);
+
+        for (OrderItemEntity orderItem : orderItems
+        ) {
+            bookService.reduceBookQuantityBy(orderItem.id.getBookId(), orderItem.quantity);
         }
     }
 
